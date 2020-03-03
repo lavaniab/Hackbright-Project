@@ -21,6 +21,7 @@ class User(db.Model):
 	def __repr__(self):
 
 		return f"<User fname={self.fname} email={self.email}>"
+		
 
 class Entry(db.Model):
 
@@ -31,6 +32,8 @@ class Entry(db.Model):
 	user_entry = db.Column(db.String(1500), nullable=False)
 	user_picture = db.Column(db.URL(200), nullable=True) ## ref url for third party image hosting
 	
+	user_entry = db.relationship("User", backref="entries")
+
 
 class Trip(db.Model):
 	"""Trip the user entered into journal."""
@@ -52,6 +55,10 @@ class Location(db.Model): #for now this will just be a nice little box with save
 	city = db.Column(db.String(100), nullable=True)
 	state = db.Column(db.String(100), nullable=True)
 	country = db.Column(db.String(100), nullable=True)
+
+
+db.create_all()
+
 ###################################################################
 
 # def connect_to_db(app):
