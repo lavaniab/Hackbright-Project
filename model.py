@@ -29,8 +29,8 @@ class Entry(db.Model):
 	entry_id = db.Column(db.String(100), autoincrement=True, primary_key=True)
 	user_id = db.Column(db.Integer, foreign_key=True(User.user_id))
 	user_entry = db.Column(db.String(1500), nullable=False)
-	user_picture = db.Column(db.LargeBinary, nullable=True) ## ???
-	## unsure if valid, maybe a whole table closer to end of project
+	user_picture = db.Column(db.URL(200), nullable=True) ## ref url for third party image hosting
+	
 
 class Trip(db.Model):
 	"""Trip the user entered into journal."""
@@ -39,25 +39,34 @@ class Trip(db.Model):
 
 	trip_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
 	entry_id = db.Column(db.Integer, foreign_key=True(Entry.entry_id))
-	location = db.Column(db.String(500), nullable=True)
+	location_id = db.Column(db.String(500),foreign_key=True(Location.location_id), nullable=True)
 	user_description = db.Column(db.String(160), nullable=True)
 
 
+class Location(db.Model): #for now this will just be a nice little box with saved info that appears
+						  # visions of a 'clickable' button that would take user to another page with the spot pointed out in a map
+	__tablename__ = "locations"
+
+	location_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+	address = db.Column(db.String(100), nullable=True)
+	city = db.Column(db.String(100), nullable=True)
+	state = db.Column(db.String(100), nullable=True)
+	country = db.Column(db.String(100), nullable=True)
 ###################################################################
 
-def connect_to_db(app):
-	"""Connect the database to our Flask app."""
+# def connect_to_db(app):
+# 	"""Connect the database to our Flask app."""
 
-	# Configure to use our PostgreSQL database
-	app.config['SQLALCHEMY_	DATABASE_URI'] = 'postgresql:///travel_journal' ##?
-	app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-	app.config['SQLALCHEMY_ECHO'] = True
-	db.app = app
-	db.init_app(app)
+# 	# Configure to use our PostgreSQL database
+# 	app.config['SQLALCHEMY_	DATABASE_URI'] = 'postgresql:///travel_journal' 
+# 	app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+# 	app.config['SQLALCHEMY_ECHO'] = True
+# 	db.app = app
+# 	db.init_app(app)
 
-if __name__ == "__main__"
+# if __name__ == "__main__"
 
-from server import app
+# from server import app
 
-connect_to_db(app)
-print("Connect to DB.")
+# connect_to_db(app)
+# print("Connect to DB.")
