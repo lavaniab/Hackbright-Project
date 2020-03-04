@@ -92,7 +92,8 @@ def user_page():
 	"""This is the user's homepage."""
 
 	user = User.query.options(db.joindedload("users").joinedload("entries")).get(user_id)
-	return render_template("user.html", user=user)
+	fname = User.query.get(fname)
+	return render_template("user.html", user=user, fname=name)
 
 	# fn in here to make a new trip log in journal
 	# save it then have the option to write an entry, send to 
