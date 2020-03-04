@@ -72,7 +72,7 @@ class Association_Table(db.Model):
 
 
 db.create_all()
-
+#db.session.commit() #just added this to trouble shoot no tables appearing in psql
 ###################################################################
 
 def connect_to_db(app):
