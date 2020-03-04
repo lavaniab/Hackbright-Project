@@ -4,8 +4,20 @@ from flask_sqlalchemy import SQLAlchemy, Model
 
 #This is the connection to PostgreSQL database from library
 #Find session object within where we do most of our interactions (like committing)
+# app = Flask(__name__) Do I need this here if in server.py????
 
+DB_URI = "postgresql:///Travel_journaldb" # Unsure of what this does, also...table names or??
 db = SQLAlchemy()
+
+# def connect_to_db(app, Travel_journaldb): #(app, db_name) #should I move to model.py??
+#     """Connect to database."""
+
+#     app.config["SQLALCHEMY_DATABASE_URI"] = f"postgresql:///{Travel_journaldb}"
+#     app.config["SQLALCHEMY_ECHO"] = True
+#     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+
+#     db.app = app
+#     db.init_app(app)
 
 class User(db.Model):
 	"""User of travel journal site"""
