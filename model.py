@@ -1,5 +1,5 @@
 """Models and database functions for Travel Journal"""
-
+from flask import Flask 
 from flask_sqlalchemy import SQLAlchemy, Model  
 
 #This is the connection to PostgreSQL database from library
@@ -71,23 +71,23 @@ class Association_Table(db.Model):
 	trip_id = db.Column(db.Integer, foreign_key("trips.trip_id"))
 
 
-#db.create_all()
+db.create_all()
 
 ###################################################################
 
-# def connect_to_db(app):
-# 	"""Connect the database to our Flask app."""
+def connect_to_db(app):
+	"""Connect the database to our Flask app."""
 
-# 	# Configure to use our PostgreSQL database
-# 	app.config['SQLALCHEMY_	DATABASE_URI'] = 'postgresql:///travel_journal' 
-# 	app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-# 	app.config['SQLALCHEMY_ECHO'] = True
-# 	db.app = app
-# 	db.init_app(app)
+	# Configure to use our PostgreSQL database
+	app.config['SQLALCHEMY_	DATABASE_URI'] = 'postgresql:///travel_journal' 
+	app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+	app.config['SQLALCHEMY_ECHO'] = True
+	db.app = app
+	db.init_app(app)
 
-# if __name__ == "__main__"
+if __name__ == "__main__":
 
-# from server import app
+	from server import app
 
-# connect_to_db(app)
-# print("Connect to DB.")
+	connect_to_db(app)
+	print("Connect to DB.")

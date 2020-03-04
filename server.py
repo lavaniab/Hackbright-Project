@@ -1,7 +1,7 @@
-from jinja2 import jinja2, StrictUndefined
+from jinja2 import StrictUndefined
 
 from flask import Flask, render_template, request, flash, redirect, session
-# from flask_debugtoolbar import DebugToolbarExtention
+from flask_debugtoolbar import DebugToolbarExtension
 
 from model import connect_to_db, db, User, Entry, Trip, Location
 
@@ -12,16 +12,26 @@ app = Flask(__name__)
 # app.secret_key = "something"
 
 # Raises an error so an undefined variable doesn't fail silently
-app.jinja_env.undefined = StrictUndefined
+# app.jinja_env.undefined = StrictUndefined
 
 # This option will cause Jinja to automatically reload templates if they've been
 # changed. This is a resource-intensive operation though, so it should only be
 # set while debugging.
 ##app.jinja_env.auto_reload = True
 
-##app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
+app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 # thank you flask documentation, got rid of the redirect error page 
 # Required to use Flask sessions and the debug toolbar
+
+def connect_to_db(app, Travel_journal): #(app, db_name)
+    """Connect to database."""
+
+    app.config["SQLALCHEMY_DATABASE_URI"] = f"postgresql:///{Travel_journal}"
+    app.config["SQLALCHEMY_ECHO"] = True
+    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+
+    db.app = app
+    db.init_app(app)
 
 @app.route("/")
 def homepage():
@@ -29,7 +39,7 @@ def homepage():
 
 	return render_template("homepage.html")
 
-@app.route("/"):
+@app.route("/")
 def register_process():
 	"""Create a user profile."""
 
@@ -110,8 +120,10 @@ def create_entry():
 
 if __name__ == '__main__':
 
-#app.debug = True
+	app.debug = True
 
-#DebugToolbarExtension(app)
+	connect_to_db(app)
 
-#app.run(host='0.0.0.0')
+	DebugToolbarExtension(app)
+
+	app.run(host='0.0.0.0')
