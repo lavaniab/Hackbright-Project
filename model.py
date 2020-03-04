@@ -66,7 +66,7 @@ class Association_Table(db.Model):
 
 	__tablename__ = "locationsTrips"
 
-	locationsTrips_id = db.Column(db.Integer, autoincrement=True)
+	locationsTrips_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
 	location_id = db.Column(db.Integer, db.ForeignKey("locations.location_id"))
 	trip_id = db.Column(db.Integer, db.ForeignKey("trips.trip_id"))
 

@@ -12,7 +12,7 @@ app = Flask(__name__)
 # app.secret_key = "something"
 
 # Raises an error so an undefined variable doesn't fail silently
-# app.jinja_env.undefined = StrictUndefined
+app.jinja_env.undefined = StrictUndefined
 
 # This option will cause Jinja to automatically reload templates if they've been
 # changed. This is a resource-intensive operation though, so it should only be
