@@ -1,9 +1,11 @@
-from jinja2 import StrictUndefined
+from jinja2 import jinja2, StrictUndefined
 
 from flask import Flask, render_template, request, flash, redirect, session
 # from flask_debugtoolbar import DebugToolbarExtention
 
 from model import connect_to_db, db, User, Entry, Trip, Location
+
+import model
 
 app = Flask(__name__)
 
@@ -63,7 +65,7 @@ def login_process():
 	session["user_id"] = user.user_id
 
 	flash(f"Logged in!")
-	return redirect(f"/users/{user.user_id}")
+	return redirect(f"/users/{user.user_id}", email=email, password=password)
 
 
 

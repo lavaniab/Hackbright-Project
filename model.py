@@ -69,7 +69,6 @@ class Association_Table(db.Model):
 	locationsTrips_id = db.Column(db.Integer, autoincrement=True)
 	location_id = db.Column(db.Integer, foreign_key("locations.location_id"))
 	trip_id = db.Column(db.Integer, foreign_key("trips.trip_id"))
-	entry_id = db.Column(db.Integer, foreign_key("entries.entry_id"))
 
 
 #db.create_all()

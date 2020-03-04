@@ -1,9 +1,20 @@
 {% extends 'base.html' %}
 
+{% block title %}Login Page{% endblock %}
 {% block body %}
+<div>
+	<form class="form-signin" method="POST" action="/login">
+		<div class="form-group">
+		  <label>Please enter your email.</label>
+		  <input type="text" name="email">
+		  <label>Please enter your password.</label>
+		  <input type="passwod" name="password">
+		 </div>
 
-
-
+	  	<button class="btn btn-lg btn-primary btn-block" type="submit">
+	  </button>
+	</form>
+</div>
 
 
 {% endblock %}
