@@ -36,6 +36,7 @@ class User(db.Model):
 
 
 class Entry(db.Model):
+	"""Entry table for all the entries from users."""
 
 	__tablename__ = "entries"
 
@@ -45,6 +46,11 @@ class Entry(db.Model):
 	user_picture = db.Column(db.String(200), nullable=True) ## ref url for third party image hosting
 	
 	user_entry = db.relationship("User", backref="entries")
+
+	def __repr__(self):
+
+		return f"<Entry entry_id={self.entry_id}>"
+
 
 
 class Trip(db.Model):
@@ -83,7 +89,7 @@ class Association_Table(db.Model):
 	trip_id = db.Column(db.Integer, db.ForeignKey("trips.trip_id"))
 
 
-db.create_all()
+
 #db.session.commit() #just added this to trouble shoot no tables appearing in psql
 ###################################################################
 
@@ -91,7 +97,7 @@ def connect_to_db(app):
 	"""Connect the database to our Flask app."""
 
 	# Configure to use our PostgreSQL database
-	app.config['SQLALCHEMY_	DATABASE_URI'] = 'postgresql:///travel_journal' 
+	app.config['SQLALCHEMY_	DATABASE_URI'] = 'postgresql:///travel_journaldb' 
 	app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 	app.config['SQLALCHEMY_ECHO'] = True
 	db.app = app
@@ -99,7 +105,10 @@ def connect_to_db(app):
 
 if __name__ == "__main__":
 
+	# from flask import Flask
 	from server import app
+	# app = Flask(__name__)
 
 	connect_to_db(app)
+	db.create_all()
 	print("Connect to DB.")

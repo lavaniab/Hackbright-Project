@@ -5,12 +5,10 @@ from flask_debugtoolbar import DebugToolbarExtension
 
 from model import connect_to_db, db, User, Entry, Trip, Location, Association_Table
 
-import model
-
+#import model
 app = Flask(__name__)
 
-app.config.from_config.py('config.py')
-#app.secret_key = ""
+app.config.from_pyfile('config.py')
 
 # Raises an error so an undefined variable doesn't fail silently
 app.jinja_env.undefined = StrictUndefined
@@ -24,15 +22,6 @@ app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 # thank you flask documentation, got rid of the redirect error page 
 # Required to use Flask sessions and the debug toolbar
 
-# def connect_to_db(app, Travel_journaldb): #(app, db_name) #should I move to model.py??
-#     """Connect to database."""
-
-#     app.config["SQLALCHEMY_DATABASE_URI"] = f"postgresql:///{Travel_journaldb}"
-#     app.config["SQLALCHEMY_ECHO"] = True
-#     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-
-#     db.app = app
-#     db.init_app(app)
 
 @app.route("/")
 def homepage():
