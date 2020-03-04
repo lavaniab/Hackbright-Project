@@ -19,7 +19,7 @@ class User(db.Model):
 	user_id = db.Column(db.Integer, primary_key=True)
 	fname = db.Column(db.String(25), nullable=False)
 	lname = db.Column(db.String(25), nullable=False)
-	email = db.Column(db.String(64), nullable=False, unique=True)
+	email = db.Column(db.String(64), unique=True)
 	password = db.Column(db.String(64), nullable=False)
 
 	def __repr__(self):
@@ -52,7 +52,7 @@ class Trip(db.Model):
 
 	trip_id = db.Column(db.Integer, primary_key=True)
 	entry_id = db.Column(db.Integer, db.ForeignKey("entries.entry_id"))
-	location_id = db.Column(db.Integer, db.ForeignKey("locations.location_id"), nullable=True)
+	location_id = db.Column(db.Integer, db.ForeignKey("locations.location_id"))
 	user_description = db.Column(db.String(160), nullable=True)
 
 	trip_entries = db.relationship("Entry", backref="trips")
@@ -100,7 +100,7 @@ if __name__ == "__main__":
 	from server import app
 
 	connect_to_db(app)
-	#drop_all()
+	#db.drop_all()
 	db.create_all()
 	#db.session.commit()
 	#app.run()
