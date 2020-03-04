@@ -23,10 +23,10 @@ app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 # thank you flask documentation, got rid of the redirect error page 
 # Required to use Flask sessions and the debug toolbar
 
-def connect_to_db(app, Travel_journal): #(app, db_name)
+def connect_to_db(app, Travel_journaldb): #(app, db_name)
     """Connect to database."""
 
-    app.config["SQLALCHEMY_DATABASE_URI"] = f"postgresql:///{Travel_journal}"
+    app.config["SQLALCHEMY_DATABASE_URI"] = f"postgresql:///{Travel_journaldb}"
     app.config["SQLALCHEMY_ECHO"] = True
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 

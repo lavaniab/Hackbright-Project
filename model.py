@@ -28,9 +28,9 @@ class Entry(db.Model):
 	__tablename__ = "entries"
 
 	entry_id = db.Column(db.String(100), autoincrement=True, primary_key=True)
-	user_id = db.Column(db.Integer, foreign_key("user.user_id"))
+	user_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))
 	user_entry = db.Column(db.String(1500), nullable=False)
-	user_picture = db.Column(db.URL(200), nullable=True) ## ref url for third party image hosting
+	user_picture = db.Column(db.String(200), nullable=True) ## ref url for third party image hosting
 	
 	user_entry = db.relationship("User", backref="entries")
 
@@ -41,8 +41,8 @@ class Trip(db.Model):
 	__tablename__ = "trips"
 
 	trip_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-	entry_id = db.Column(db.Integer, foreign_key("entries.entry_id"))
-	location_id = db.Column(db.String(500),foreign_key("locations.location_id"), nullable=True)
+	entry_id = db.Column(db.Integer, db.ForeignKey("entries.entry_id"))
+	location_id = db.Column(db.String(500), db.ForeignKey("locations.location_id"), nullable=True)
 	user_description = db.Column(db.String(160), nullable=True)
 
 	trip_entries = db.relationship("Entry", backref="trips")
@@ -67,8 +67,8 @@ class Association_Table(db.Model):
 	__tablename__ = "locationsTrips"
 
 	locationsTrips_id = db.Column(db.Integer, autoincrement=True)
-	location_id = db.Column(db.Integer, foreign_key("locations.location_id"))
-	trip_id = db.Column(db.Integer, foreign_key("trips.trip_id"))
+	location_id = db.Column(db.Integer, db.ForeignKey("locations.location_id"))
+	trip_id = db.Column(db.Integer, db.ForeignKey("trips.trip_id"))
 
 
 db.create_all()
