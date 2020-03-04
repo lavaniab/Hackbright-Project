@@ -14,6 +14,15 @@ app = Flask(__name__)
 # Raises an error so an undefined variable doesn't fail silently
 app.jinja_env.undefined = StrictUndefined
 
+# This option will cause Jinja to automatically reload templates if they've been
+# changed. This is a resource-intensive operation though, so it should only be
+# set while debugging.
+##app.jinja_env.auto_reload = True
+
+##app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
+# thank you flask documentation, got rid of the redirect error page 
+# Required to use Flask sessions and the debug toolbar
+
 @app.route("/")
 def homepage():
 	"""Homepage"""
@@ -97,3 +106,12 @@ def create_entry():
 	entry = db.session.query(Entry).filter_by(user_id="user")
 
 	return render_template("users_journal.html")
+
+
+if __name__ == '__main__':
+
+#app.debug = True
+
+#DebugToolbarExtension(app)
+
+#app.run(host='0.0.0.0')
