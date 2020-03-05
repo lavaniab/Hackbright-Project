@@ -4,7 +4,7 @@
 
 
 {% block body %}
-<div style="background-image: url(/test-photo);">
+<!-- <div style="background-image: url(/test-photo);">
 
 <nav class="navbar navbar-inverse">
   <div class="container-fluid">
@@ -14,19 +14,29 @@
     <ul class="nav navbar-nav">
       <li class="active"><a href="#">Home</a></li>
       <li><a href="#">Login</a></li>
-      <!-- <li><a href="#">Page 2</a></li>
-      <li><a href="#">Page 3</a></li> -->
+      <li><a href="#">Page 2</a></li>
+      <li><a href="#">Page 3</a></li> 
     </ul>
-  </div>
-</nav>
-  
+  </div> this is bootstrap
+</nav> -->   
+<form action="/login" method="GET">
+		<label>Enter your email address:</label><br>
+		<input type="text" name="email" required>
+		<label></label><br>
+		<br>
+		<input type="submit">
+	</form><br>
+
+
 <div class="container">
   <h3>Welcome to your private travel log!</h3>
   <p></p>
 </div>
+
+
 <!-- <div class="picture">
 	<img src="/test-photo"> -->
-</div>
+
 
 
 

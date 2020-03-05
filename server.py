@@ -44,7 +44,7 @@ def register_process():
 	db.session.add(new_user) 
 	db.session.commit()
 
-	# flash(f"User {email} added.")
+	flash(f"User {email} added.")
 	return redirect(f"/users/{new_user.user_id}") ## is this equiv to the user_id col?
 
 
@@ -52,7 +52,7 @@ def register_process():
 def login_form():
 	"""User log in page"""
 
-	return render_template("login_form.html")
+	return render_template("login_form.html", email=email)
 
 @app.route("/login, methods=['POST']")
 def login_process():
@@ -70,7 +70,7 @@ def login_process():
 	if user.password != password:
 		flash(f"Incorrect password!")
 		return redirect("/login") ## want to reload this spot on same page vs redirect
-
+									#ajax request
 	session["user_id"] = user.user_id
 
 	flash(f"Logged in!")
