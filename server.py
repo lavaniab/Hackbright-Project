@@ -2,6 +2,11 @@ from jinja2 import StrictUndefined
 
 from flask import Flask, render_template, request, flash, redirect, session
 from flask_debugtoolbar import DebugToolbarExtension
+#from markupsafe import escape off of flask doc for flask login
+#from flask_bootstrap import Bootstrap
+#from flask_wtf import FlaskForm
+#from wtforms import StringField, PasswordField, BooleanField
+#from wtforms.validators import InputRequired, Email, Length
 
 from model import connect_to_db, db, User, Entry, Trip, Location, Locations_Trip
 
@@ -29,9 +34,19 @@ def homepage():
 
 	return render_template("homepage.html")
 
-@app.route("/")
-def register_process():
-	"""Create a user profile."""
+# @app.route("/")
+# def register_process():
+# 	"""Create a user profile."""
+
+
+
+# 	#flash(f"User {email} added.")
+# 	return render_template("homepage.html") #/{new_user.user_id}") ## is this equiv to the user_id col?
+	
+
+@app.route("/login", methods=["POST"])
+def login_form():
+	"""User log in page"""
 
 	# Get form variables
 	fname = request.form["fname"]
@@ -44,45 +59,44 @@ def register_process():
 	db.session.add(new_user) 
 	db.session.commit()
 
-	#flash(f"User {email} added.")
-	return render_template("login_form.html") #/{new_user.user_id}") ## is this equiv to the user_id col?
+
+	#session["user_id"] = request.args.get("User.user_id")
+	return render_template("login_form.html")
+
 	
 
-@app.route("/login")
-def login_form():
-	"""User log in page"""
-
-	return render_template("login_form.html")
-	# session["user_id"] = request.args.get("User.user_id")
-
-	# if "user_id" in session:
-	# 	return redirect("/user")
-	# else:
-	# 	return render_template("login_form.html", name=session["name"])
-
-@app.route("/api/auth") #methods=['POST'])
+@app.route("/api/auth", methods=["POST"])
 def login_process():
 	"""Have a user login/create a profile."""
 
+
+
+
+
 	# Get form variables
-	# email = request.form["email"]
-	# password = request.form["password"]
+	email = request.form["email"]
+	password = request.form["password"]
+	user = User.query.filter_by(email=email).one()
 
-	# user = User.query.filter_by("email").one()
+	if not user:
+		flash(f"Email not yet registered.")
+		return redirect("/login")
 
-	# if not user:
-	# 	#flash(f"Email not yet registered.")
-	# 	return redirect("/login") ## ???
+	if user.password != password:
+		flash(f"Incorrect password!")
+		return redirect("/login") ## want to reload this spot on same page vs redirect
 
-	# if User.password != password:
-	# 	#flash(f"Incorrect password!")
-	# 	return redirect("/login") ## want to reload this spot on same page vs redirect
-	# 								#ajax request ajax goes in html file?
-	# #session["user_id"] = User.user_id
+	if user and user.password ==password:								#ajax request ajax goes in html file?
+		session["email"] = email # Does this give me access to other data in the row
+		flash("Logged in!")
+		if "user_id" in session:
+			return redirect("/user")
+	else:
+		return render_template("login_form.html")
 
-	# #flash(f"Logged in!")
-	return render_template("user.html") # email=email, password=password)
-	#pass  
+	
+	######return render_template("user.html", email=email, password=password)
+	pass  
 
 
 @app.route("/logout")
@@ -98,7 +112,7 @@ def logout():
 def user_page():
 	"""This is the user's homepage."""
 
-	#user = User.query.get(session["user_id"])
+	#user = User.query.get(session["user_id"]) #see line 90 question for this fn
 	#name = User.query.get(session["name"])
 
 	return render_template("user.html") #user=user, fname=name)
@@ -107,7 +121,7 @@ def user_page():
 	# save it then have the option to write an entry, send to 
 	# return render_template("entry.html")
 
-@app.route("/user") #<int:user_id>")
+@app.route("/user_entry") #<int:user_id>")
 def create_entry():
 	"""This is where the user can add an entry to their trip."""
 

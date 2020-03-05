@@ -19,7 +19,7 @@
     </ul>
   </div> this is bootstrap
 </nav> -->   
-<form action="/login" method="GET">
+<form action="/api/auth" method='POST'>
 		<label>Enter your email address:</label><br>
 		<input type="text" name="email" required>
 		<label></label><br>
@@ -33,7 +33,7 @@
   <p></p>
 </div>
 <!--users table -->
-<form  action="/login">
+<form  action="/login" method="POST">
   <h3>User Information</h3><br>
   <br>
   <label>First Name</label>
