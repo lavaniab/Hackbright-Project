@@ -45,72 +45,79 @@ def register_process():
 	db.session.commit()
 
 	#flash(f"User {email} added.")
-	return redirect(f"/user") #/{new_user.user_id}") ## is this equiv to the user_id col?
+	return render_template("login_form.html") #/{new_user.user_id}") ## is this equiv to the user_id col?
 	
 
-@app.route("/login", methods=["GET"])
+@app.route("/login")
 def login_form():
 	"""User log in page"""
 
-	session["email"] = request.args.get("email")
+	return render_template("login_form.html")
+	# session["user_id"] = request.args.get("User.user_id")
 
-	if "email" in session:
-		return redirect("/user")
-	else:
-		return render_template("login_form.html", email=session["email"])
+	# if "user_id" in session:
+	# 	return redirect("/user")
+	# else:
+	# 	return render_template("login_form.html", name=session["name"])
 
-@app.route("/login", methods=['POST'])
+@app.route("/api/auth") #methods=['POST'])
 def login_process():
 	"""Have a user login/create a profile."""
 
 	# Get form variables
-	email = request.form["email"]
-	password = request.form["password"]
+	# email = request.form["email"]
+	# password = request.form["password"]
 
-	user = User.query.filter_by(email=email).first()
+	# user = User.query.filter_by("email").one()
 
-	if not user:
-		#flash(f"Email not yet registered.")
-		return redirect("/login") ## ???
+	# if not user:
+	# 	#flash(f"Email not yet registered.")
+	# 	return redirect("/login") ## ???
 
-	if user.password != password:
-		#flash(f"Incorrect password!")
-		return redirect("/login") ## want to reload this spot on same page vs redirect
-									#ajax request
-	session["user_id"] = user.user_id
+	# if User.password != password:
+	# 	#flash(f"Incorrect password!")
+	# 	return redirect("/login") ## want to reload this spot on same page vs redirect
+	# 								#ajax request ajax goes in html file?
+	# #session["user_id"] = User.user_id
 
-	#flash(f"Logged in!")
-	return render_template("user.html", email=email, password=password)
-	#pass
+	# #flash(f"Logged in!")
+	return render_template("user.html") # email=email, password=password)
+	#pass  
 
 
 @app.route("/logout")
 def logout():
 	"""User logout."""
 
-	del session["user_id"]
+	del session["name"]
 	#flash(f"Logged out.")
 	return redirect("/")
 
 
-@app.route("/user", methods=['POST'])
+@app.route("/user")
 def user_page():
 	"""This is the user's homepage."""
 
-	user = request.form.get(user_id)
-	fname = User.query.get(fname)
-	return render_template("user.html", user=user, fname=name)
+	#user = User.query.get(session["user_id"])
+	#name = User.query.get(session["name"])
+
+	return render_template("user.html") #user=user, fname=name)
 
 	# fn in here to make a new trip log in journal
 	# save it then have the option to write an entry, send to 
 	# return render_template("entry.html")
 
-@app.route("/users/<int:user_id>")
+@app.route("/user") #<int:user_id>")
 def create_entry():
 	"""This is where the user can add an entry to their trip."""
 
-	user = db.session.query(User).filter_by(user_id="User.entry_id") #relationship query?
-	entry = db.session.query(Entry).filter_by(user_id="user")
+	#user = db.session.query(User).filter_by(user_id="User.entry_id") #relationship query?
+	#entry = db.session.query(Entry).filter_by(user_id="user")
+
+	#need a button on html that opens a text box to then have the entry submitted
+	#need to commit entry to db
+	#db.session.add(entry_id)
+	#db.session.commit()
 
 	return render_template("users_journal.html")
 
