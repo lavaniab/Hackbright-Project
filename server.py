@@ -52,7 +52,12 @@ def register_process():
 def login_form():
 	"""User log in page"""
 
-	return render_template("login_form.html", email=email)
+	session["email"] = request.args.get("email")
+
+	if "email" in session:
+		return redirect("user.html")
+	else:
+		return render_template("login_form.html", email=email)
 
 @app.route("/login, methods=['POST']")
 def login_process():
@@ -74,7 +79,7 @@ def login_process():
 	session["user_id"] = user.user_id
 
 	flash(f"Logged in!")
-	return redirect(f"/users/{user.user_id}", email=email, password=password)
+	return redirect(f"/users_journal.html/{users.user_id}", email=email, password=password)
 
 
 
