@@ -55,9 +55,9 @@ def login_form():
 	session["email"] = request.args.get("email")
 
 	if "email" in session:
-		return redirect("user.html")
+		return redirect("users_journal.html")
 	else:
-		return render_template("login_form.html", email=email)
+		return render_template("login_form.html", email=session["email"])
 
 @app.route("/login, methods=['POST']")
 def login_process():
