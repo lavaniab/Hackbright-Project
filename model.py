@@ -24,8 +24,8 @@ class User(db.Model):
 
 	def __repr__(self):
 
-		return f"<User fname={self.fname} email={self.email}>"
-
+		#return f"<User fname={self.fname} email={self.email}>"
+		pass
 
 class Entry(db.Model):
 	"""Entry table for all the entries from users."""
@@ -41,8 +41,8 @@ class Entry(db.Model):
 
 	def __repr__(self):
 
-		return f"<Entry entry_id={self.entry_id}>"
-
+		#return f"<Entry entry_id={self.entry_id}>"
+		pass
 
 
 class Trip(db.Model):
@@ -52,7 +52,7 @@ class Trip(db.Model):
 
 	trip_id = db.Column(db.Integer, primary_key=True)
 	entry_id = db.Column(db.Integer, db.ForeignKey("entries.entry_id"))
-	location_id = db.Column(db.Integer, db.ForeignKey("locations.location_id"))
+	trip_name = db.Column(db.String(100), nullable=False)
 	user_description = db.Column(db.String(160), nullable=True)
 
 	trip_entries = db.relationship("Entry", backref="trips")

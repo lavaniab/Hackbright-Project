@@ -44,9 +44,9 @@ def register_process():
 	db.session.add(new_user) 
 	db.session.commit()
 
-	flash(f"User {email} added.")
+	#flash(f"User {email} added.")
 	return redirect(f"/users/{new_user.user_id}") ## is this equiv to the user_id col?
-
+	#pass
 
 @app.route("/login", methods=["GET"])
 def login_form():
@@ -70,18 +70,18 @@ def login_process():
 	user = User.query.filter_by(email=email).first()
 
 	if not user:
-		flash(f"Email not yet registered.")
+		#flash(f"Email not yet registered.")
 		return redirect("/user/<int:user_id>") ## ???
 
 	if user.password != password:
-		flash(f"Incorrect password!")
+		#flash(f"Incorrect password!")
 		return redirect("/login") ## want to reload this spot on same page vs redirect
 									#ajax request
 	session["user_id"] = user.user_id
 
-	flash(f"Logged in!")
+	#flash(f"Logged in!")
 	return redirect(f"/users/<int:user_id", email=email, password=password)
-
+	#pass
 
 
 @app.route("/logout")
@@ -89,7 +89,7 @@ def logout():
 	"""User logout."""
 
 	del session["user_id"]
-	flash(f"Logged out.")
+	#flash(f"Logged out.")
 	return redirect("/")
 
 
