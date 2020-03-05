@@ -24,8 +24,8 @@ class User(db.Model):
 
 	def __repr__(self):
 
-		#return f"<User fname={self.fname} email={self.email}>"
-		pass
+		return f"<User fname={self.fname} email={self.email}>"
+		
 
 class Entry(db.Model):
 	"""Entry table for all the entries from users."""
@@ -34,15 +34,15 @@ class Entry(db.Model):
 
 	entry_id = db.Column(db.Integer, primary_key=True)
 	user_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))
-	user_entry = db.Column(db.String(1500), nullable=False)
+	entry = db.Column(db.String(), nullable=False)
+	trip_id = db.Column(db.Integer, db.ForeignKey("trips.trip_id"))
 	user_picture = db.Column(db.String(200), nullable=True) ## ref url for third party image hosting
 	
-	user_entry = db.relationship("User", backref="entries")
+	user = db.relationship("User", backref="entries")
 
 	def __repr__(self):
 
-		#return f"<Entry entry_id={self.entry_id}>"
-		pass
+		return f"<Entry entry_id={self.entry_id}>"
 
 
 class Trip(db.Model):
@@ -51,9 +51,9 @@ class Trip(db.Model):
 	__tablename__ = "trips"
 
 	trip_id = db.Column(db.Integer, primary_key=True)
-	entry_id = db.Column(db.Integer, db.ForeignKey("entries.entry_id"))
+	user_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))
 	trip_name = db.Column(db.String(100), nullable=False)
-	user_description = db.Column(db.String(160), nullable=True)
+	description = db.Column(db.String(160), nullable=True)
 
 	trip_entries = db.relationship("Entry", backref="trips")
 
@@ -68,10 +68,10 @@ class Location(db.Model): #for now this will just be a nice little box with save
 	state = db.Column(db.String(100), nullable=True)
 	country = db.Column(db.String(100), nullable=True)
 
-	locations = db.relationship("Trip", backref="locations") 
+	#locations = db.relationship("Trip", backref="locations") 
 
 
-class Association_Table(db.Model):
+class Locations_Trip(db.Model):
 	"""Association between trips and locations."""
 
 	__tablename__ = "locationsTrips"
@@ -80,6 +80,8 @@ class Association_Table(db.Model):
 	location_id = db.Column(db.Integer, db.ForeignKey("locations.location_id"))
 	trip_id = db.Column(db.Integer, db.ForeignKey("trips.trip_id"))
 
+	locations = db.relationship('Location', backref="locationsTrips")
+	trips = db.relationship('Trip', backref="locationsTrips")
 
 
 #db.session.commit() #just added this to trouble shoot no tables appearing in psql
@@ -100,9 +102,9 @@ if __name__ == "__main__":
 	from server import app
 
 	connect_to_db(app)
-	#db.drop_all()
+	# db.drop_all()
 	db.create_all()
-	#db.session.commit()
-	#app.run()
+	# db.session.commit()
+	# app.run()
 
 	print("Connect to DB.")

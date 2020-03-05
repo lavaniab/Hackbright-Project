@@ -3,7 +3,7 @@ from jinja2 import StrictUndefined
 from flask import Flask, render_template, request, flash, redirect, session
 from flask_debugtoolbar import DebugToolbarExtension
 
-from model import connect_to_db, db, User, Entry, Trip, Location, Association_Table
+from model import connect_to_db, db, User, Entry, Trip, Location, Locations_Trip
 
 #import model
 app = Flask(__name__)
@@ -45,8 +45,8 @@ def register_process():
 	db.session.commit()
 
 	#flash(f"User {email} added.")
-	return redirect(f"/users/{new_user.user_id}") ## is this equiv to the user_id col?
-	#pass
+	return redirect(f"/user") #/{new_user.user_id}") ## is this equiv to the user_id col?
+	
 
 @app.route("/login", methods=["GET"])
 def login_form():
@@ -55,7 +55,7 @@ def login_form():
 	session["email"] = request.args.get("email")
 
 	if "email" in session:
-		return redirect("/user/<int:user_id>")
+		return redirect("/user")
 	else:
 		return render_template("login_form.html", email=session["email"])
 
@@ -71,7 +71,7 @@ def login_process():
 
 	if not user:
 		#flash(f"Email not yet registered.")
-		return redirect("/user/<int:user_id>") ## ???
+		return redirect("/login") ## ???
 
 	if user.password != password:
 		#flash(f"Incorrect password!")
@@ -80,7 +80,7 @@ def login_process():
 	session["user_id"] = user.user_id
 
 	#flash(f"Logged in!")
-	return redirect(f"/users/<int:user_id", email=email, password=password)
+	return render_template("user.html", email=email, password=password)
 	#pass
 
 
@@ -93,11 +93,11 @@ def logout():
 	return redirect("/")
 
 
-@app.route("/users/<int:user_id>")
+@app.route("/user", methods=['POST'])
 def user_page():
 	"""This is the user's homepage."""
 
-	user = User.query.options(db.joindedload("users").joinedload("entries")).get(user_id)
+	user = request.form.get(user_id)
 	fname = User.query.get(fname)
 	return render_template("user.html", user=user, fname=name)
 
