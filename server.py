@@ -55,12 +55,13 @@ def login_form():
 	session["email"] = request.args.get("email")
 
 	if "email" in session:
-		return redirect("users_journal.html")
+		return redirect("/user/<int:user_id>")
 	else:
 		return render_template("login_form.html", email=session["email"])
 
-@app.route("/login, methods=['POST']")
+@app.route("/login", methods=['POST'])
 def login_process():
+	"""Have a user login/create a profile."""
 
 	# Get form variables
 	email = request.form["email"]
@@ -70,7 +71,7 @@ def login_process():
 
 	if not user:
 		flash(f"Email not yet registered.")
-		return redirect("/login")
+		return redirect("/user/<int:user_id>") ## ???
 
 	if user.password != password:
 		flash(f"Incorrect password!")
@@ -79,7 +80,7 @@ def login_process():
 	session["user_id"] = user.user_id
 
 	flash(f"Logged in!")
-	return redirect(f"/users_journal.html/{users.user_id}", email=email, password=password)
+	return redirect(f"/users/<int:user_id", email=email, password=password)
 
 
 
