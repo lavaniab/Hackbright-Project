@@ -44,53 +44,65 @@ def homepage():
 # 	return render_template("homepage.html") #/{new_user.user_id}") ## is this equiv to the user_id col?
 	
 
-@app.route("/registration", methods=["POST"])
+@app.route("/registration", methods=["GET", "POST"])
 def login_form():
 	"""User registration/create a profile page"""
-
+	if request.method == "POST":
 	# Get form variables
-	fname = request.form["fname"]
-	lname = request.form["lname"]
-	email = request.form["email"]
-	password = request.form["password"]
+		fname = request.form["fname"]
+		lname = request.form["lname"]
+		email = request.form["email"]
+		password = request.form["password"]
 
-	new_user = User(fname=fname, lname=lname, email=email, password=password)
+		new_user = User(fname=fname, lname=lname, email=email, password=password)
 
-	db.session.add(new_user) 
-	db.session.commit()
-
-
+		db.session.add(new_user)
+		db.session.flush()
+		#print(new_user.user_id)
+		db.session.commit()
+		session["user_id"] = new_user.user_id
+		flash("New user profile created!")
+		return render_template("user.html")
+	else:
 	#session["user_id"] = request.args.get("User.user_id")
-	return render_template("user.html")
+		return redirect("/")
 
 	
 
-@app.route("/api/auth", methods=["POST"])
+@app.route("/api/auth", methods=["GET", "POST"])
 def login_process():
 	"""Have a user login."""
 
 
 	# Get form variables
-	email = request.form["email"]
-	password = request.form["password"]
-	user = User.query.filter_by(email=email).one()
+	# email = request.form["email"]
+	# password = request.form["password"]
+	# user = User.query.filter_by(email=email).one()
 
-	if not user:
-		flash(f"Email not yet registered.")
-		return redirect("/")
+	if request.method == "POST":
 
-	if user.password != password:
-		flash(f"Incorrect password!")
-		return redirect("/") ## want to reload this spot on same page vs redirect
+		email = request.form["email"]
+		password = request.form["password"]
+		user = User.query.filter_by(email=email).one()
 
-	if user and user.password ==password:								#ajax request ajax goes in html file?
-		session["email"] = email
-		flash("Logged in!")
-		if "user_id" in session:
-			return redirect("/user")
+		if not user:
+			flash(f"Email not yet registered.")
+			return redirect("/")
+
+		if user.password != password:
+			flash(f"Incorrect password!")
+			return redirect("/") ## want to reload this spot on same page vs redirect
+
+		if user and user.password ==password:								#ajax request ajax goes in html file?
+			session["email"] = email
+			
+			if "user_id" in session:
+				flash("Logged in!")
+				return redirect("/user")
+		else:
+			return render_template("/")
 	else:
-		return render_template("/")
-
+		redirect("/")
 	
 	##return render_template("user.html", email=email, password=password)
 	#pass  
@@ -105,64 +117,74 @@ def logout():
 	return redirect("/")
 
 
-@app.route("/user_location", methods=["POST"])
+@app.route("/user_location", methods=["GET", "POST"])
 def user_location():
 	"""Gather location information about a trip."""
 
-
+	if request.method == "POST":
 	#user = db.session.query(User).filter_by(user_id="User.entry_id")
 	#user = User.query.filter_by(email=email).one()
 	#name = User.query.get(User.email)
-	address = request.form["fname"]
-	city = request.form["lname"]
-	state = request.form["email"]
-	country = request.form["password"]
+		address = request.form["address"]
+		city = request.form["city"]
+		state = request.form["state"]
+		country = request.form["country"]
 
-	location = Location(address=address, city=city, state=state, country=country)
+		location = Location(address=address, city=city, state=state, country=country)
 
-	#return render_template("user.html"user=user)
+		#return render_template("user.html"user=user)
 
-	# fn in here to make a new trip log in journal
-	# save it then have the option to write an entry
-	db.session.add(location)
-	db.session.commit()
+		# fn in here to make a new trip log in journal
+		# save it then have the option to write an entry
+		db.session.add(location)
+		db.session.commit()
+		flash("Your location has been added!")
+		return render_template("user.html")
 
-	return render_template("user.html")
+	else:
+		return render_template("user.html") ##unsure of the else
 
-@app.route("/user_trip", methods={"POST"})
+@app.route("/user_trip", methods=["GET", "POST"])
 def user_trip():
 
-	#user_id = query from user table
-	trip_name = request.form["trip_name"]
-	description = request.form["description"]
+	if request.method == "POST":
 
-	trip = Trip(trip_name=trip_name, description=description)
+		user_id = session["user_id"]
+		trip_name = request.form["trip_name"]
+		description = request.form["description"]
 
-	db.session.add(trip)
-	db.session.commit()
+		trip = Trip(trip_name=trip_name, description=description)
 
-	return render_template("user.html")
+		db.session.add(trip)
+		db.session.commit()
+		flash("Your trip has been added!")
+		return render_template("user.html") # want to save on page, reload just this
+	else:
+		return redirect("/")
 
-@app.route("/user_entry", methods=["POST"]) #<int:user_id>")
+
+@app.route("/user_entry", methods=["GET", "POST"]) #<int:user_id>")
 def create_entry():
 	"""This is where the user can add an entry to their trip."""
+	if request.method == "POST":
 
-	#user_id = db.session.query(User).filter_by(user_id="User.entry_id") #relationship query?
-	#trip_id = db.session.query(Entry).filter_by(user_id="user")
+		user_id = session["user_id"]
+		print(user_id)
+		trip_id = db.session.query(Entry).filter_by(user_id="user_id") #along correct line
 	#user_picture = query too
-	entry = request.form["entry"]
+		entry = request.form["entry"]
 
-	entry = Entry(entry=entry)
+		entry = Entry(entry=entry)
 
-	db.session.add(entry)
-	db.session.commit()
+		db.session.add(entry)
+		db.session.commit()
 
 	#need a button on html that opens a text box to then have the entry submitted
 	#need to commit entry to db
-	#db.session.add(entry_id)
-	#db.session.commit()
-
-	return render_template("user.html")
+		flash("Your entry has been added!")
+		return render_template("users_journal.html")
+	else:
+		return redirect("/")
 
 
 if __name__ == '__main__':
