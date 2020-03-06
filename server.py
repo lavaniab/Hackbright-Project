@@ -70,9 +70,6 @@ def login_process():
 	"""Have a user login/create a profile."""
 
 
-
-
-
 	# Get form variables
 	email = request.form["email"]
 	password = request.form["password"]
@@ -87,7 +84,7 @@ def login_process():
 		return redirect("/login") ## want to reload this spot on same page vs redirect
 
 	if user and user.password ==password:								#ajax request ajax goes in html file?
-		session["email"] = email # Does this give me access to other data in the row
+		session["email"] = email
 		flash("Logged in!")
 		if "user_id" in session:
 			return redirect("/user")
@@ -96,15 +93,15 @@ def login_process():
 
 	
 	######return render_template("user.html", email=email, password=password)
-	pass  
+	#pass  
 
 
 @app.route("/logout")
 def logout():
 	"""User logout."""
 
-	del session["name"]
-	#flash(f"Logged out.")
+	del session["email"]
+	flash("Logged out.")
 	return redirect("/")
 
 
@@ -112,10 +109,12 @@ def logout():
 def user_page():
 	"""This is the user's homepage."""
 
-	#user = User.query.get(session["user_id"]) #see line 90 question for this fn
-	#name = User.query.get(session["name"])
 
-	return render_template("user.html") #user=user, fname=name)
+	#user = db.session.query(User).filter_by(user_id="User.entry_id")
+	user = User.query.filter_by(email=email).one()
+	#name = User.query.get(User.email)
+
+	return render_template("user.html"user=user)
 
 	# fn in here to make a new trip log in journal
 	# save it then have the option to write an entry, send to 
