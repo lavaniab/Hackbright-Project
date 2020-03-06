@@ -19,31 +19,46 @@
     </ul>
   </div> this is bootstrap
 </nav> -->   
-<form action="/api/auth" method='POST'>
+
+<form action="/api/auth" method="POST">
+  <div class="form">
+    <label for="email">Email address:</label>
+    <input type="email" class="form-control" id="email" required>
+  </div>
+  <div class="form-group">
+    <label for="pwd">Password:</label>
+    <input type="password" class="form-control" id="pwd" required>
+  </div>
+  <div class="checkbox">
+    <label><input type="checkbox"> Remember me</label>
+  </div>
+  <button type="submit" class="btn btn-default">Submit</button>
+</form>
+<!-- <form action="/api/auth" method='POST'>
 		<label>Enter your email address:</label><br>
 		<input type="text" name="email" required>
 		<label></label><br>
 		<br>
 		<input type="submit">
-	</form><br>
+	</form><br> -->
 
 
 <div class="container">
   <h3>Welcome to your private travel log!</h3>
-  <p></p>
+  <p>Please fill out this form to create a profile.</p>
 </div>
 <!--users table -->
-<form  action="/login" method="POST">
+<form  action="/registration" method="POST">
   <h3>User Information</h3><br>
   <br>
   <label>First Name</label>
-  <input type="text" name="fname"><br>
+  <input type="text" name="fname" required><br>
   <label>Last Name</label>
-  <input type="text" name="lname"><br>
+  <input type="text" name="lname" required><br>
   <label>Email</label>
-  <input type="text" name="email"><br>
+  <input type="text" name="email" required><br>
   <label>Password</label>
-  <input type="text" name="password">
+  <input type="text" name="password" required><br>
   <br>
   <input type="submit">
 </form>
