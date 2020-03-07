@@ -1,9 +1,31 @@
-b{% extends 'base.html' %}
+{% extends 'base.html' %}
 
 {% block title %}(user's) Journal{% endblock %}
 
 {% block body %}
+<h4>Welcome to your journal.</h4>
 
+
+<form action="/user" method="GET">
+	<h3>Would you like to create a trip?</h3>
+	<input type="radio" name="yes" value="yes">
+	<label for="yes">Yes</label><br>
+	<input type="radio" name="no" value="no">
+	<label for="no">No</label><br>
+	<input type="submit">
+</form>
+
+<div class="container">
+	<p>Show trip log, searchable</p>
+</div>
+
+<div class="container">
+	<p>Show location log, searchable</p>
+</div>
+
+<div class="container">
+	<p>Show entry log, searchable</p>
+</div>
 
 
 <!-- Not sure where or how to use this yet, leaflet.js usage example:

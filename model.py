@@ -63,6 +63,7 @@ class Location(db.Model): #for now this will just be a nice little box with save
 	__tablename__ = "locations"
 
 	location_id = db.Column(db.Integer, primary_key=True)
+	name = db.Column(db.String(100), nullable=True)
 	address = db.Column(db.String(100), nullable=True)
 	city = db.Column(db.String(100), nullable=True)
 	state = db.Column(db.String(100), nullable=True)
@@ -82,9 +83,6 @@ class Locations_Trip(db.Model):
 
 	locations = db.relationship('Location', backref="locationsTrips")
 	trips = db.relationship('Trip', backref="locationsTrips")
-
-
-#db.session.commit() #just added this to trouble shoot no tables appearing in psql
 ###################################################################
 
 def connect_to_db(app):
