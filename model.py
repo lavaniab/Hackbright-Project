@@ -71,8 +71,7 @@ class Location(db.Model): #for now this will just be a nice little box with save
 
 	#locations = db.relationship("Trip", backref="locations") 
 
-
-class Locations_Trip(db.Model):
+class Locations_Trips(db.Model):
 	"""Association between trips and locations."""
 
 	__tablename__ = "locationsTrips"

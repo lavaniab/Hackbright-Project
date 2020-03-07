@@ -8,7 +8,7 @@ from flask_debugtoolbar import DebugToolbarExtension
 #from wtforms import StringField, PasswordField, BooleanField
 #from wtforms.validators import InputRequired, Email, Length
 
-from model import connect_to_db, db, User, Entry, Trip, Location, Locations_Trip
+from model import connect_to_db, db, User, Entry, Trip, Location, Locations_Trips
 
 #import model
 app = Flask(__name__)
@@ -45,7 +45,7 @@ def homepage():
 	
 
 @app.route("/registration", methods=["GET", "POST"])
-def login_form():
+def registration():
 	"""User registration/create a profile page"""
 	if request.method == "POST":
 	# Get form variables
@@ -57,14 +57,11 @@ def login_form():
 		new_user = User(fname=fname, lname=lname, email=email, password=password)
 
 		db.session.add(new_user)
-		db.session.flush()
-		#print(new_user.user_id)
 		db.session.commit()
 		session["user_id"] = new_user.user_id
 		flash("New user profile created!")
-		return render_template("users_journal.html")
+		return redirect("/user_journal")
 	else:
-	#session["user_id"] = request.args.get("User.user_id")
 		return redirect("/")
 
 	
@@ -85,10 +82,10 @@ def login_process():
 
 		if user.password != password:
 			flash(f"Incorrect password!")
-			return redirect("/") ## want to reload this spot on same page vs redirect
+			return redirect("/") 
 
-		if user and user.password ==password:								#ajax request ajax goes in html file?
-			session["email"] = email
+		if user and user.password ==password:
+			session["user_id"] = user.user_id
 			
 			if "user_id" in session:
 				flash("Logged in!")
@@ -96,10 +93,7 @@ def login_process():
 		else:
 			return redirect("/")
 	else:
-		redirect("/")
-	
-	##return render_template("user.html", email=email, password=password)
-	#pass  
+		redirect("/")  
 
 
 @app.route("/logout")
@@ -110,23 +104,21 @@ def logout():
 	flash("Logged out.")
 	return redirect("/")
 
-@app.route("/user_journal")
-def user_homepage():
+@app.route("/user/<int:user_id>/journal")
+def user_homepage(user_id):
 	"""This is the user's homepage."""
+	trips = Trip.query.filter_by(user_id=user_id)
 
-	if request.method == "GET":
-		name = request.args.get("yes") #?
-		return render_template("trip.html")
-	else:
-		return redirect("/")
+	return render_template("users_journal.html")
 
 
 @app.route("/user_trip", methods=["GET", "POST"])
 def user_trip():
+	"""Create a new trip."""
 
 	if request.method == "POST":
 
-		user_id = session["user_id"] #does not work
+		user_id = session["user_id"]
 		trip_name = request.form["trip_name"]
 		description = request.form["description"]
 
@@ -134,14 +126,29 @@ def user_trip():
 
 		db.session.add(trip)
 		db.session.commit()
+
 		flash("Your trip has been added!")
-		return render_template("location.html") # want to save on page, reload just this
+		return redirect(f"/user_trip/{trip.trip_id}") # want to save on page, reload just this
 	else:
-		return redirect("users_journal.html")
+		return render_template("create_trip.html")
+
+@app.route("/user_trip/<int:trip_id>")
+def get_trip(trip_id):
+	"""Page for certain trip with locations and entries available"""
+
+	trip = Trip.query.filter_by(trip_id=trip_id).one()
+	name = trip.trip_name
+	description = trip.description
+	entries = trip.trip_entries
+	locations = trip.locations
+
+	return render_template("trips.html", trip=trip, name=name,
+							description=description, entries=entries,
+							locations=locations)
 
 
 @app.route("/user_location", methods=["GET", "POST"])
-def user_location():
+def trip_location():
 	"""Gather location information about a trip."""
 
 	if request.method == "POST":
@@ -159,10 +166,10 @@ def user_location():
 		db.session.add(location)
 		db.session.commit()
 		flash("Your location has been added!")
-		return render_template("entry.html")
+		return render_template("create_entry.html")
 
 	else:
-		return render_template("user.html") ##unsure of the else
+		return render_template() ##unsure of the else
 
 
 @app.route("/user_entry", methods=["GET", "POST"]) #<int:user_id>")
@@ -186,7 +193,7 @@ def create_entry():
 	#need a button on html that opens a text box to then have the entry submitted
 	#need to commit entry to db
 		flash("Your entry has been added!")
-		return render_template("users_journal.html")
+		return redirect("/user_journal")
 	else:
 		return redirect("/")
 

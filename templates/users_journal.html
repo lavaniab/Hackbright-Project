@@ -1,22 +1,21 @@
 {% extends 'base.html' %}
 
-{% block title %}(user's) Journal{% endblock %}
+{% block title %}Journal{% endblock %}
 
 {% block body %}
 <h4>Welcome to your journal.</h4>
 
-
-<form action="/user" method="GET">
-	<h3>Would you like to create a trip?</h3>
-	<input type="radio" name="yes" value="yes">
-	<label for="yes">Yes</label><br>
-	<input type="radio" name="no" value="no">
-	<label for="no">No</label><br>
-	<input type="submit">
-</form>
+<div>
+<a href="/user_trip">Create a Trip</a>
+</div>
 
 <div class="container">
 	<p>Show trip log, searchable</p>
+	<ul>
+		{% for trip in trips %}
+		<li><a href="/user_trip/{trip.trip_id}">{trip.trip_name}</a></li>
+		{% endfor %}
+	</ul>
 </div>
 
 <div class="container">
