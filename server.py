@@ -2,6 +2,8 @@ from jinja2 import StrictUndefined
 
 from flask import Flask, render_template, request, flash, redirect, session
 from flask_debugtoolbar import DebugToolbarExtension
+# from flask_sqlalchemy_session import flask_scoped_session, current_session
+# session = flask_scoped_session(session_factory, app)
 #from markupsafe import escape off of flask doc for flask login
 #from flask_bootstrap import Bootstrap
 #from flask_wtf import FlaskForm
@@ -42,10 +44,13 @@ def registration():
 		new_user = User(fname=fname, lname=lname, email=email,
 						 password=password)
 
+
 		db.session.add(new_user)
-		session["user_id"] = new_user.user_id
-		print("user_id")
 		db.session.commit()
+
+		user_id = new_user.user_id
+		print(f"\n\n\n\n user_id={user_id}")
+		session["user_id"] = user_id
 	
 		flash("New user profile created!")
 		return redirect(f"/user_journal/{new_user.user_id}")
@@ -58,15 +63,17 @@ def registration():
 def login_process():
 	"""Have a user login."""
 
+	db.session() #?
+	cursor = db.session.execute("SELECT user_id FROM users") #?
+
 	if request.method == "POST":
-		#User.query.all() this???
 		email = request.form["email"]
 		password = request.form["password"]
 
-		user = User.query.filter_by(email=email).first()
-		# password = User.query.filter_by(password=password).first()
-		# user = User.query.filter_by(fname=fname).first()
-		user_id = User.query.filter_by(user_id=user_id).first() # is this needed???
+		user = User.query.filter_by(email=email).one()
+		password = User.query.filter_by(password=password).one()
+		user_id = User.query.filter_by(user_id=user_id).one()
+		user_id = session["user_id"]
 
 		if not user:
 			flash(f"Email not yet registered.")
@@ -99,10 +106,10 @@ def logout():
 @app.route("/user_journal/<int:user_id>")
 def user_homepage(user_id):
 	"""This is the user's homepage."""
-
+	
 	trips = Trip.query.filter_by(user_id=user_id)
 
-	return render_template("users_journal.html", trips=trips)
+	return render_template("users_journal.html", trips=trips, user_id=user_id)
 
 
 @app.route("/user_trip", methods=["GET", "POST"])
@@ -111,11 +118,12 @@ def user_trip():
 
 	if request.method == "POST":
 
+		# user_id = User.query.filter_by(User.user_id=session["user_id"])
 		user_id = session["user_id"]
 		trip_name = request.form["trip_name"]
 		description = request.form["description"]
-
-		trip = Trip(trip_name=trip_name, description=description)
+		print(f"\n\n\n\n user_id={user_id}")
+		trip = Trip(trip_name=trip_name, description=description, user_id=user_id)
 
 		db.session.add(trip)
 		db.session.commit()
@@ -128,7 +136,9 @@ def user_trip():
 @app.route("/user_trip/<int:trip_id>")
 def get_trip(trip_id):
 	"""Page for certain trip with locations and entries available"""
-
+	#db.session() #?
+	#cursor = db.session.execute("SELECT user_id FROM users") #?
+	#db.session.commit(user_id)
 	trip = Trip.query.filter_by(trip_id=trip_id).one()
 	name = trip.trip_name
 	description = trip.description

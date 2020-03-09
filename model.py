@@ -99,7 +99,7 @@ if __name__ == "__main__":
 	from server import app
 
 	connect_to_db(app)
-	# db.drop_all()
+	#db.drop_all()
 	db.create_all()
 	# db.session.commit()
 	# app.run()

@@ -11,11 +11,13 @@
 
 <div class="container">
 	<p>Show trip log, searchable</p>
+	{% if trips %}
 	<ul>
 		{% for trip in trips %}
 		<li><a href="/user_trip/{trip.trip_id}">{trip.trip_name}</a></li>
 		{% endfor %}
 	</ul>
+	{% endif %}
 </div>
 
 <div class="container">
