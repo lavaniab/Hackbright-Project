@@ -111,7 +111,9 @@ def user_journal(user_id):
 	for trip in trips:
 		for location in trip.locations:
 			locations.append(Location.query.get(location_id))
+
 	entries = Entry.query.filter_by(user_id=user_id).all()
+
 	return render_template("users_journal.html",
 						   trips=trips,
 						   user_id=user_id,
@@ -133,33 +135,33 @@ def create_trip():
 
 		db.session.add(trip)
 		db.session.commit()
+		trip_id = trip.trip_id
+		# trip_id = db.session.execute("SELECT trip_id FROM trips")
 
 		flash("Your trip has been added!")
-		return redirect(f"/user_trip/{trip.trip_id}") # want to save on page, reload just this
+		return render_template(f"create_location.html") #create_trip/<int:trip_id>") #{trip.trip_id}") # want to save on page, reload just this
 	else:
 		return render_template("create_trip.html")
 
-@app.route("/user_trip/<int:trip_id>")
+@app.route("/create_trip/<int:trip_id>")
 def get_trip(trip_id):
 	"""Page for certain trip with locations and entries available"""
 	
-	trip = Trip.query.filter_by(trip_id=trip_id).one()
+	trip = Trip.query.get(trip_id)
 	name = trip.trip_name
 	description = trip.description
-	entries = trip.trip_entries
+	entries = trip.entries
 
 	return render_template("trips.html", trip=trip, name=name,
 							description=description, entries=entries)
 
 
-@app.route("/trip_location", methods=["GET", "POST"])
-def trip_location():
+@app.route("/add_location", methods=["GET", "POST"])
+def add_location():
 	"""Gather location information about a trip."""
 
 	if request.method == "POST":
-	#user = db.session.query(User).filter_by(user_id="User.entry_id")
-	#user = User.query.filter_by(email=email).one()
-	#name = User.query.get(User.email)
+	
 		name = request.form["name"]
 		address = request.form["address"]
 		city = request.form["city"]
@@ -172,25 +174,27 @@ def trip_location():
 		#if refactor with modelMixin, can do location.save
 		db.session.commit()
 
-		locations = trip.locations
+		location_id = location.location_id
+		#locations = trip.locations
 
 		flash("Your location has been added!")
 		return render_template("create_entry.html")
 
 	else:
-		return redirect(f"/user_trip")
+		return redirect(f"/create_trip")
 
 @app.route("/location_trip/<int:location_id>")
 def get_location(location_id):
 	"""Search for a location."""
 
-	trip_name = trips.trip_name
+	locations = trip.locations
+	trips = trips.trip_name
 	location = locations.name
 
 	#return redirect("/", location_id=location_id)
 	pass
 
-@app.route("/user_entry", methods=["GET", "POST"]) #<int:user_id>")
+@app.route("/add_entry", methods=["GET", "POST"]) #<int:user_id>")
 def create_entry():
 	"""This is where the user can add an entry to their trip."""
 	
@@ -208,7 +212,7 @@ def create_entry():
 		db.session.commit()
 
 		flash("Your entry has been added!")
-		return redirect(f"/user_journal")
+		return redirect(f"/user_journal/<int:user_id>")
 	else:
 		return redirect(f"/")
 
