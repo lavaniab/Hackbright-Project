@@ -10,7 +10,7 @@ from flask_debugtoolbar import DebugToolbarExtension
 #from wtforms import StringField, PasswordField, BooleanField
 #from wtforms.validators import InputRequired, Email, Length
 
-from model import connect_to_db, db, User, Entry, Trip, Location, Locations_Trips
+from model import connect_to_db, db, User, Entry, Trip, Location
 
 app = Flask(__name__)
 
@@ -28,7 +28,7 @@ app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 def homepage():
 	"""Homepage"""
 
-	return render_template("homepage.html")
+	return render_template("welcome_page.html")
 
 
 @app.route("/registration", methods=["GET", "POST"])
@@ -41,8 +41,7 @@ def registration():
 		lname = request.form["lname"]
 		email = request.form["email"]
 		password = request.form["password"]
-		new_user = User(fname=fname, lname=lname, email=email,
-						 password=password)
+		new_user = User(fname=fname, lname=lname, email=email, password=password)
 
 
 		db.session.add(new_user)
@@ -53,7 +52,7 @@ def registration():
 		session["user_id"] = user_id
 	
 		flash("New user profile created!")
-		return redirect(f"/user_journal/{new_user.user_id}")
+		return redirect(f"/user_journal/{user_id}")
 	else:
 		return redirect(f"/")
 
@@ -63,8 +62,7 @@ def registration():
 def login_process():
 	"""Have a user login."""
 
-	db.session() #?
-	cursor = db.session.execute("SELECT user_id FROM users") #?
+	#cursor = db.session.execute("SELECT user_id FROM users") #?
 
 	if request.method == "POST":
 		email = request.form["email"]
@@ -73,7 +71,7 @@ def login_process():
 		user = User.query.filter_by(email=email).one()
 		password = User.query.filter_by(password=password).one()
 		user_id = User.query.filter_by(user_id=user_id).one()
-		user_id = session["user_id"]
+		#user_id = session["user_id"]
 
 		if not user:
 			flash(f"Email not yet registered.")
@@ -104,21 +102,29 @@ def logout():
 	return redirect(f"/")
 
 @app.route("/user_journal/<int:user_id>")
-def user_homepage(user_id):
-	"""This is the user's homepage."""
+def user_journal(user_id):
+	"""This is the user's journal homepage."""
 	
-	trips = Trip.query.filter_by(user_id=user_id)
+	trips = Trip.query.filter_by(user_id=user_id).all()
+	# locations = Location.query.filter_by
+	locations = []
+	for trip in trips:
+		for location in trip.locations:
+			locations.append(Location.query.get(location_id))
+	entries = Entry.query.filter_by(user_id=user_id).all()
+	return render_template("users_journal.html",
+						   trips=trips,
+						   user_id=user_id,
+						   locations=locations,
+						   entries=entries)
 
-	return render_template("users_journal.html", trips=trips, user_id=user_id)
 
-
-@app.route("/user_trip", methods=["GET", "POST"])
-def user_trip():
+@app.route("/create_trip", methods=["GET", "POST"])
+def create_trip():
 	"""Create a new trip."""
 
 	if request.method == "POST":
 
-		# user_id = User.query.filter_by(User.user_id=session["user_id"])
 		user_id = session["user_id"]
 		trip_name = request.form["trip_name"]
 		description = request.form["description"]
@@ -136,9 +142,7 @@ def user_trip():
 @app.route("/user_trip/<int:trip_id>")
 def get_trip(trip_id):
 	"""Page for certain trip with locations and entries available"""
-	#db.session() #?
-	#cursor = db.session.execute("SELECT user_id FROM users") #?
-	#db.session.commit(user_id)
+	
 	trip = Trip.query.filter_by(trip_id=trip_id).one()
 	name = trip.trip_name
 	description = trip.description
@@ -148,7 +152,7 @@ def get_trip(trip_id):
 							description=description, entries=entries)
 
 
-@app.route("/user_location", methods=["GET", "POST"])
+@app.route("/trip_location", methods=["GET", "POST"])
 def trip_location():
 	"""Gather location information about a trip."""
 
@@ -165,14 +169,26 @@ def trip_location():
 		location = Location(address=address, city=city, state=state, country=country, name=name)
 
 		db.session.add(location)
-		locations = Trip.query.filter_by(location_id=location_id)
+		#if refactor with modelMixin, can do location.save
 		db.session.commit()
+
+		locations = trip.locations
+
 		flash("Your location has been added!")
 		return render_template("create_entry.html")
 
 	else:
 		return redirect(f"/user_trip")
 
+@app.route("/location_trip/<int:location_id>")
+def get_location(location_id):
+	"""Search for a location."""
+
+	trip_name = trips.trip_name
+	location = locations.name
+
+	#return redirect("/", location_id=location_id)
+	pass
 
 @app.route("/user_entry", methods=["GET", "POST"]) #<int:user_id>")
 def create_entry():
@@ -191,8 +207,6 @@ def create_entry():
 		db.session.add(entry)
 		db.session.commit()
 
-	#need a button on html that opens a text box to then have the entry submitted
-	#need to commit entry to db
 		flash("Your entry has been added!")
 		return redirect(f"/user_journal")
 	else:

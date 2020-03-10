@@ -6,11 +6,11 @@
 <h4>Welcome to your journal.</h4>
 
 <div>
-<a href="/user_trip">Create a Trip</a>
+<a href="/trip_location">Create a Trip</a>
 </div>
 
 <div class="container">
-	<p>Show trip log, searchable</p>
+	<p>Show trips log, searchable</p>
 	{% if trips %}
 	<ul>
 		{% for trip in trips %}
@@ -20,22 +20,27 @@
 	{% endif %}
 </div>
 
-<div class="container">
+ <div class="container">
 	<p>Show location log, searchable</p>
+	{% if locations %}
+	<ul>
+		{% for location in locations %}
+		<li><a href="/user_location/{location.location_id}">{location.name}</a></li>
+		{% endfor %}
+	</ul>
+	{% endif %}
 </div>
 
 <div class="container">
 	<p>Show entry log, searchable</p>
+	{% if entries %}
+	<ul>
+		{% for entry in entries %}
+		<li><a href="/user_entry/{entry.entry_id}">{entry.entry}</a></li>
+		{% endfor %}
+	</ul>
+	{% endif %}
 </div>
-
-
-<!-- Not sure where or how to use this yet, leaflet.js usage example:
-
-initialize the map on the "map" div with a given center and zoom
-var map = L.map('map', {
-    center: [51.505, -0.09],
-    zoom: 13
-}); -->
-
+ 
 
 {% endblock %}

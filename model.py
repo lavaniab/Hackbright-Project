@@ -10,6 +10,15 @@ from flask_sqlalchemy import SQLAlchemy, Model
 SQLALCHEMY_DATABASE_URI = "postgresql:///Travel_journaldb" # Unsure of what this does, also...table names or??
 db = SQLAlchemy()
 
+# 
+	# location_id = db.Column(db.Integer, db.ForeignKey("locations.location_id"))
+	# trip_id = db.Column(db.Integer, db.ForeignKey("trips.trip_id"))
+# locationTrips = db.Table("location_trips", 
+
+# 	db.Column("location_id", db.Integer, db.ForeignKey("location.location_id")),
+# 	db.Column("trip_id", db.Integer, db.ForeignKey("trip.trip_id")))
+
+
 
 class User(db.Model):
 	"""User of travel journal site"""
@@ -25,24 +34,6 @@ class User(db.Model):
 	def __repr__(self):
 
 		return f"<User fname={self.fname} email={self.email}>"
-		
-
-class Entry(db.Model):
-	"""Entry table for all the entries from users."""
-
-	__tablename__ = "entries"
-
-	entry_id = db.Column(db.Integer, primary_key=True)
-	user_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))
-	entry = db.Column(db.String(), nullable=False)
-	trip_id = db.Column(db.Integer, db.ForeignKey("trips.trip_id"))
-	user_picture = db.Column(db.String(200), nullable=True) ## ref url for third party image hosting
-	
-	user = db.relationship("User", backref="entries")
-
-	def __repr__(self):
-
-		return f"<Entry entry_id={self.entry_id}>"
 
 
 class Trip(db.Model):
@@ -55,7 +46,8 @@ class Trip(db.Model):
 	trip_name = db.Column(db.String(100), nullable=False)
 	description = db.Column(db.String(160), nullable=True)
 
-	trip_entries = db.relationship("Entry", backref="trips")
+	entries = db.relationship("Entry", backref="trips")
+	locations = db.relationship("Location", secondary="locations_trips", backref="trips")
 
 class Location(db.Model): #for now this will just be a nice little box with saved info that appears
 	"""Locations of the trip."""  # visions of a 'clickable' button that would take user to another page with the spot pointed out in a map
@@ -69,19 +61,31 @@ class Location(db.Model): #for now this will just be a nice little box with save
 	state = db.Column(db.String(100), nullable=True)
 	country = db.Column(db.String(100), nullable=True)
 
-	#locations = db.relationship("Trip", backref="locations") 
+	# trips = db.relationship("Trip", secondary="locations_trips", backref="locations") 
 
-class Locations_Trips(db.Model):
-	"""Association between trips and locations."""
+class Entry(db.Model):
+	"""Entry table for all the entries for a user."""
 
-	__tablename__ = "locationsTrips"
+	__tablename__ = "entries"
 
-	locationsTrips_id = db.Column(db.Integer, primary_key=True)
-	location_id = db.Column(db.Integer, db.ForeignKey("locations.location_id"))
+	entry_id = db.Column(db.Integer, primary_key=True)
+	user_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))
 	trip_id = db.Column(db.Integer, db.ForeignKey("trips.trip_id"))
+	entry = db.Column(db.String(), nullable=False)
+	user_picture = db.Column(db.String(200), nullable=True) ## ref url for third party image hosting
+	
+	user = db.relationship("User", backref="entries")
 
-	locations = db.relationship('Location', backref="locationsTrips")
-	trips = db.relationship('Trip', backref="locationsTrips")
+	def __repr__(self):
+
+		return f"<Entry entry_id={self.entry_id}>"
+
+
+locations_trips = db.Table("locations_trips", 
+
+	db.Column("location_id", db.Integer, db.ForeignKey("locations.location_id"), primary_key=True),
+	db.Column("trip_id", db.Integer, db.ForeignKey("trips.trip_id"), primary_key=True))
+
 ###################################################################
 
 def connect_to_db(app):
@@ -101,7 +105,5 @@ if __name__ == "__main__":
 	connect_to_db(app)
 	#db.drop_all()
 	db.create_all()
-	# db.session.commit()
-	# app.run()
 
 	print("Connect to DB.")
