@@ -56,13 +56,14 @@ def registration():
 	else:
 		return redirect(f"/")
 
-	
 
 @app.route("/api/auth", methods=["GET", "POST"])
 def login_process():
 	"""Have a user login."""
 
-	#cursor = db.session.execute("SELECT user_id FROM users") #?
+	email = User.query.get(email).one()
+	user_id = User.query.get(user_id).one()
+	#db.session.execute("SELECT user_id FROM users") 
 
 	if request.method == "POST":
 		email = request.form["email"]
@@ -143,6 +144,18 @@ def create_trip():
 	else:
 		return render_template("create_trip.html")
 
+	if request.method == "GET":			#I think this is right direction to get a drop down menu or list
+
+		user_id = session["user_id"]
+		trips = []
+		for trip in trips:
+			trip_id = Trip.query.get(trip_id)
+			name = trip.trip_name
+			trips.append(name)
+
+	return redirect(f"/create_trip/{trip_id}")
+
+
 @app.route("/create_trip/<int:trip_id>")
 def get_trip(trip_id):
 	"""Page for certain trip with locations and entries available"""
@@ -194,28 +207,29 @@ def get_location(location_id):
 	#return redirect("/", location_id=location_id)
 	pass
 
-@app.route("/add_entry", methods=["GET", "POST"]) #<int:user_id>")
-def create_entry():
+@app.route("/add_entry/<int:trip_id>", methods=["GET", "POST"]) #<int:user_id>")
+def create_entry(trip_id):
 	"""This is where the user can add an entry to their trip."""
 	
+	trip = Trip.query.get(trip_id)
+	user_id = session["user_id"]
+
 	if request.method == "POST":
-
-		user_id = session["user_id"]
-		print(user_id)
-
-		trip_id = db.session.query(Trip).filter_by(user_id=user_id).one() #along correct line
 		entry = request.form["entry"]
-
 		entry = Entry(entry=entry)
 
 		db.session.add(entry)
 		db.session.commit()
 
 		flash("Your entry has been added!")
-		return redirect(f"/user_journal/<int:user_id>")
+		return redirect(f"/create_trip")
 	else:
-		return redirect(f"/")
+		return redirect(f"/user_journal/{user_id}")
 
+# @app.route("/sandbox/<int:trip_id>")
+# def sandbox(trip_id):
+# 	entry = Entry.query.filter_by(trip_id=trip_id).first()
+# 	return(f"{entry.entry}")
 
 if __name__ == '__main__':
 

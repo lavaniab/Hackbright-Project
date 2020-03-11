@@ -75,6 +75,7 @@ class Entry(db.Model):
 	user_picture = db.Column(db.String(200), nullable=True) ## ref url for third party image hosting
 	
 	user = db.relationship("User", backref="entries")
+	#trips = db.relationship("Trip", backref="entries")
 
 	def __repr__(self):
 
