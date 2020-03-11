@@ -57,40 +57,19 @@ def registration():
 		return redirect(f"/")
 
 
-@app.route("/api/auth", methods=["GET", "POST"])
+@app.route("/api/auth", methods=["POST"])
 def login_process():
 	"""Have a user login."""
-
-	email = User.query.get(email).one()
-	user_id = User.query.get(user_id).one()
-	app.logger.info(f"\n\n\n\n IN LOGIN_PROC user_id={user_id}")
-
-	if request.method == "POST":
-		email = request.form["email"]
-		password = request.form["password"]
-
-		user = User.query.filter_by(email=email).one()
-		password = User.query.filter_by(password=password).one()
-		user_id = User.query.filter_by(user_id=user_id).one()
-
-		if not user:
-			flash(f"Email not yet registered.")
-			return redirect(f"/")
-
-		if user.password != password:
-			flash(f"Incorrect password!")
-			return redirect(f"/") 
-
-		if user and user.password ==password:
-			session["user_id"] = user.user_id
-			
-			if "user_id" in session:
-				flash("Logged in!")
-				return redirect(f"/user_journal/{user.user_id}")
-		else:
-			return redirect(f"/")
+		#user.is_valid_password 65
+	user = User.query.filter_by(email=request.form.get('email')).one()
+	user_id = user.user_id
+	if user.password == (request.form.get('password')):
+		session['user_id'] = user.user_id
+		flash('Login success!', 'success')
+		return redirect(f"/user_journal/{user_id}")
 	else:
-		redirect(f"/")  
+		flash('Invalid password. Try again.', 'danger')
+		return redirect("/")
 
 
 @app.route("/logout")
@@ -229,7 +208,7 @@ def get_location(user_id):
 
 	location = Location.query.get(location_id) 
 	trip =Trip.query.get(trip_id)
-	user_id = trip.user_id
+	#user_id = trip.user_id
 	name = location.name 
 	address = location.address
 	city = location.city
