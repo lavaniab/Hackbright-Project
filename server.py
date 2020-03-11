@@ -2,14 +2,6 @@ from jinja2 import StrictUndefined
 
 from flask import Flask, render_template, request, flash, redirect, session
 from flask_debugtoolbar import DebugToolbarExtension
-# from flask_sqlalchemy_session import flask_scoped_session, current_session
-# session = flask_scoped_session(session_factory, app)
-#from markupsafe import escape off of flask doc for flask login
-#from flask_bootstrap import Bootstrap
-#from flask_wtf import FlaskForm
-#from wtforms import StringField, PasswordField, BooleanField
-#from wtforms.validators import InputRequired, Email, Length
-
 from model import connect_to_db, db, User, Entry, Trip, Location
 
 app = Flask(__name__)
@@ -26,7 +18,7 @@ app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 
 @app.route("/")
 def homepage():
-	"""Homepage"""
+	"""Homepage with login or create profile."""
 
 	return render_template("welcome_page.html")
 
@@ -86,11 +78,12 @@ def user_journal(user_id):
 	
 	trips = Trip.query.filter_by(user_id=user_id).all()
 	app.logger.info(f"\n\n\n\n IN USER_JOUR user_id={user_id}")
-	locations = []
-	for trip in trips:
-		for location in trip.locations:
-			locations.append(Location.query.get(location_id))
-
+	locations = Location.query.filter_by(user_id=user_id).all()
+	# locations = []
+	# for trip in trips:
+	# 	for location in trip.locations:
+	# 		locations.append(location)
+	print("SDCVGBHGFDSASDFGFDSA" f"locations = {locations}")
 	entries = Entry.query.filter_by(user_id=user_id).all()
 
 	return render_template("users_journal.html",
@@ -119,7 +112,7 @@ def create_trip():
 		app.logger.info(f"\n\n\n\n IN CREATE_TRIP trip_id={trip_id}")
 		flash("Your trip has been added!")
 		session['trip_id'] = trip_id
-		return render_template("create_location.html") #create_trip/<int:trip_id>") #{trip.trip_id}") # want to save on page, reload just this
+		return render_template("create_location.html", trip_id=trip_id) #create_trip/<int:trip_id>") #{trip.trip_id}") # want to save on page, reload just this
 
 	else:
 		return render_template("create_trip.html")
@@ -152,7 +145,7 @@ def get_trip(trip_id):
 	user_id = trip.user_id
 	app.logger.info(f"\n\n\n\n IN GET_TRIP() user_id={user_id}")
 	
-	if user_id == session["user_id"]:
+	if user_id: # if user_id == session["user_id"]
 		for trip in trips:
 			trip_id = Trip.query.get(trip_id)
 			app.logger.info(f"\n\n\n\n IN LOOP GET_TRIP() trip_id={trip_id}")
@@ -167,39 +160,52 @@ def get_trip(trip_id):
 								entries=entries,
 								user_id=user_id)
 
+@app.route("/select_trip")
+def select_trip():
 
-@app.route("/add_location", methods=["POST"]) #removed ["GET"], separated routes
-def add_location():
+	user_id = session["user_id"]
+	trips = Trip.query.filter_by(user_id=user_id).all()
+
+	return render_template("trips_selector.html", trips=trips)
+
+
+@app.route("/add_location/<int:trip_id>", methods=["GET", "POST"])
+def add_location(trip_id):
 	"""Gather location information about a trip."""
 
-	# if request.method == "POST":
-	user_id = session["user_id"]
-	app.logger.info(f"\n\n\n\n IN ADD_LOCAT user_id={user_id}")
-	name = request.form["name"]
-	address = request.form["address"]
-	city = request.form["city"]
-	state = request.form["state"]
-	country = request.form["country"]
+	trip = Trip.query.get(trip_id)
 
-	location = Location(user_id=user_id,
-						address=address,
-						city=city,
-						state=state,
-						country=country,
-						name=name)
+	if request.method == "POST":
+		user_id = session["user_id"]
+		app.logger.info(f"\n\n\n\n IN ADD_LOCAT user_id={user_id}")
+		name = request.form["name"]
+		address = request.form["address"]
+		city = request.form["city"]
+		state = request.form["state"]
+		country = request.form["country"]
 
-	db.session.add(location)
-	#if refactor with modelMixin, can do location.save
-	db.session.commit()
+		location = Location(user_id=user_id,
+							address=address,
+							city=city,
+							state=state,
+							country=country,
+							name=name)
 
-	location_id = location.location_id
-	app.logger.info(f"\n\n\n\n IN ADD_LOCAT location_id={location_id}")
+		location.trips = [trip]
 
-	flash("Your location has been added!")
-	return render_template("create_entry.html")
+		db.session.add(location)
+		#if refactor with modelMixin, can do location.save
+		db.session.commit()
 
-	# else:
-	# 	return redirect(f"/create_trip")
+		location_id = location.location_id
+		app.logger.info(f"\n\n\n\n IN ADD_LOCAT location_id={location_id}")
+
+		flash("Your location has been added!")
+		return render_template("create_entry.html")
+
+	else:
+		return render_template("create_location.html", trip_id=trip_id)
+
 
 @app.route("/locations/<int:user_id>")
 def get_location(user_id):
@@ -208,7 +214,7 @@ def get_location(user_id):
 
 	location = Location.query.get(location_id) 
 	trip =Trip.query.get(trip_id)
-	#user_id = trip.user_id
+	user_id = trip.user_id #do I need this one if id is getting passed into fn
 	name = location.name 
 	address = location.address
 	city = location.city
@@ -217,12 +223,12 @@ def get_location(user_id):
 	
 	locations = []
 	
-	if user_id == session["user_id"]:
+	if user_id:
 		for location in locations:
 			location = Location.query.get(location_id)
 			name = location.name
 			app.logger.info(f"\n\n\n\n IN GET_LOCAT name={name}")
-			locations.append(location)
+			locations.append(name)
 		return render_template("trips.html",
 								trip=trip,
 								name=name,
