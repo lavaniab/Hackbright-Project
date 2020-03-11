@@ -48,7 +48,7 @@ def registration():
 		db.session.commit()
 
 		user_id = new_user.user_id
-		print(f"\n\n\n\n user_id={user_id}")
+		print(f"\n\n\n\n IN REGIS user_id={user_id}")
 		session["user_id"] = user_id
 	
 		flash("New user profile created!")
@@ -63,7 +63,7 @@ def login_process():
 
 	email = User.query.get(email).one()
 	user_id = User.query.get(user_id).one()
-	#db.session.execute("SELECT user_id FROM users") 
+	print(f"\n\n\n\n IN LOGIN_PROC user_id={user_id}")
 
 	if request.method == "POST":
 		email = request.form["email"]
@@ -72,7 +72,6 @@ def login_process():
 		user = User.query.filter_by(email=email).one()
 		password = User.query.filter_by(password=password).one()
 		user_id = User.query.filter_by(user_id=user_id).one()
-		#user_id = session["user_id"]
 
 		if not user:
 			flash(f"Email not yet registered.")
@@ -107,7 +106,7 @@ def user_journal(user_id):
 	"""This is the user's journal homepage."""
 	
 	trips = Trip.query.filter_by(user_id=user_id).all()
-	# locations = Location.query.filter_by
+	print(f"\n\n\n\n IN USER_JOUR user_id={user_id}")
 	locations = []
 	for trip in trips:
 		for location in trip.locations:
@@ -122,13 +121,14 @@ def user_journal(user_id):
 						   entries=entries)
 
 
-@app.route("/create_trip", methods=["GET", "POST"])
+@app.route("/create_trip", methods=["GET","POST"])
 def create_trip():
 	"""Create a new trip."""
 
 	if request.method == "POST":
 
 		user_id = session["user_id"]
+		print(f"\n\n\n\n iN CREATE_TRIP user_id={user_id}")
 		trip_name = request.form["trip_name"]
 		description = request.form["description"]
 		print(f"\n\n\n\n user_id={user_id}")
@@ -137,20 +137,23 @@ def create_trip():
 		db.session.add(trip)
 		db.session.commit()
 		trip_id = trip.trip_id
-		# trip_id = db.session.execute("SELECT trip_id FROM trips")
-
+		print(f"\n\n\n\n IN CREATE_TRIP trip_id={trip_id}")
 		flash("Your trip has been added!")
-		return render_template(f"create_location.html") #create_trip/<int:trip_id>") #{trip.trip_id}") # want to save on page, reload just this
+		return render_template("create_location.html") #create_trip/<int:trip_id>") #{trip.trip_id}") # want to save on page, reload just this
+
 	else:
 		return render_template("create_trip.html")
 
-	if request.method == "GET":			#I think this is right direction to get a drop down menu or list
-
+	if request.method == "GET": #trying to separate out routes
+										#moved this to def get_trip()
 		user_id = session["user_id"]
+		print(f"\n\n\n\n IN CREATE_TRIP 'GET' user_id={user_id}")
 		trips = []
 		for trip in trips:
 			trip_id = Trip.query.get(trip_id)
+			print(f"\n\n\n\n IN LOOP OF CREATE_TRIP 'GET' user_id={user_id}")
 			name = trip.trip_name
+			print(f"\n\n\n\n name={name}")
 			trips.append(name)
 
 	return redirect(f"/create_trip/{trip_id}")
@@ -160,71 +163,171 @@ def create_trip():
 def get_trip(trip_id):
 	"""Page for certain trip with locations and entries available"""
 	
-	trip = Trip.query.get(trip_id)
+	print(f"\n\n\n\n IN GET_TRIP() trip_id={trip_id}")
+	trip = Trip.query.get(trip_id) #returns query object, whole row of data
 	name = trip.trip_name
 	description = trip.description
 	entries = trip.entries
+	trips = []
+	user_id = trip.user_id
+	print(f"\n\n\n\n IN GET_TRIP() user_id={user_id}")
+	
+	if user_id == session["user_id"]:
+		for trip in trips:
+			trip_id = Trip.query.get(trip_id)
+			print(f"\n\n\n\n IN LOOP GET_TRIP() trip_id={trip_id}")
+			name = trip.trip_name
+			print(f"\n\n\n\n IN LOOP GET_TRIP() name={name}")
+			trips.append(name)
 
-	return render_template("trips.html", trip=trip, name=name,
-							description=description, entries=entries)
+		return render_template("trips.html",
+								trip=trip,
+								name=name,
+								description=description,
+								entries=entries,
+								user_id=user_id)
 
 
-@app.route("/add_location", methods=["GET", "POST"])
+@app.route("/add_location", methods=["POST"]) #removed ["GET"], separated routes
 def add_location():
 	"""Gather location information about a trip."""
 
-	if request.method == "POST":
-	
-		name = request.form["name"]
-		address = request.form["address"]
-		city = request.form["city"]
-		state = request.form["state"]
-		country = request.form["country"]
+	# if request.method == "POST":
+	user_id = session["user_id"]
+	print(f"\n\n\n\n IN ADD_LOCAT user_id={user_id}")
+	name = request.form["name"]
+	address = request.form["address"]
+	city = request.form["city"]
+	state = request.form["state"]
+	country = request.form["country"]
 
-		location = Location(address=address, city=city, state=state, country=country, name=name)
+	location = Location(user_id=user_id,
+						address=address,
+						city=city,
+						state=state,
+						country=country,
+						name=name)
 
-		db.session.add(location)
-		#if refactor with modelMixin, can do location.save
-		db.session.commit()
+	db.session.add(location)
+	#if refactor with modelMixin, can do location.save
+	db.session.commit()
 
-		location_id = location.location_id
-		#locations = trip.locations
+	location_id = location.location_id
+	print(f"\n\n\n\n IN ADD_LOCAT location_id={location_id}")
 
-		flash("Your location has been added!")
-		return render_template("create_entry.html")
+	flash("Your location has been added!")
+	return render_template("create_entry.html")
 
-	else:
-		return redirect(f"/create_trip")
+	# else:
+	# 	return redirect(f"/create_trip")
 
-@app.route("/location_trip/<int:location_id>")
-def get_location(location_id):
+@app.route("/locations/<int:user_id>")
+def get_location(user_id):
 	"""Search for a location."""
 
-	locations = trip.locations
-	trips = trips.trip_name
-	location = locations.name
 
-	#return redirect("/", location_id=location_id)
-	pass
+	location = Location.query.get(trip_id) #assoc table
+	trip =Trip.query.get(trip_id)
+	user_id = trip.user_id
+	name = location.name 
+	address = location.address
+	city = location.city
+	state = location.state
+	country = location.country
+	
+	locations = []
+	
+	if user_id == session["user_id"]:
+		for location in locations:
+			location = Location.query.get(trip_id)
+			name = location.name
+			print(f"\n\n\n\n IN GET_LOCAT name={name}")
+			locations.append(location)
+		return render_template("trips.html",
+								trip=trip,
+								name=name,
+								address=address,
+								city=city,
+								state=state,
+								country=country)
 
-@app.route("/add_entry/<int:trip_id>", methods=["GET", "POST"]) #<int:user_id>")
-def create_entry(trip_id):
+
+@app.route("/add_entry", methods=["GET", "POST"]) #<int:user_id>")
+def add_entry():
 	"""This is where the user can add an entry to their trip."""
 	
 	trip = Trip.query.get(trip_id)
+	trip_id = trip.trip_id
+	print(f"\n\n\n\n IN ADD_ENTRY trip_id={trip_id}")
 	user_id = session["user_id"]
+	print(f"\n\n\n\n IN ADD_ENTRY user_id={user_id}")
 
 	if request.method == "POST":
 		entry = request.form["entry"]
 		entry = Entry(entry=entry)
 
+		entry = Entry(entry=entry, trip_id=trip_id, user_id=user_id)
+
 		db.session.add(entry)
 		db.session.commit()
 
 		flash("Your entry has been added!")
-		return redirect(f"/create_trip")
-	else:
 		return redirect(f"/user_journal/{user_id}")
+	else:
+		return redirect(f"/user_entry/{trip_id}")
+
+@app.route("/user_entry/<int:user_id>")
+def get_entry(user_id):
+	"""Page for certain trip with locations and entries available"""
+	
+	entry = Entry.query.get(user_id)
+	user_id = entries.user_id
+	entry_id = entries.entry_id
+	print(f"\n\n\n\n IN GET_ENTRY() user_id={user_id}")
+	trip = Trip.query.get(trip_id)
+	trip_id = entries.trip_id
+	print(f"\n\n\n\n IN GET_TRIP() trip_id={trip_id}")
+	name = trip.trip_name
+	entry = entries.entry
+
+	entries = []
+	
+	if user_id == session["user_id"]:
+		for entry in entries:
+			if entry_id:
+				print(f"\n\n\n\n IN LOOP GET_TRIP() trip_id={trip_id}")
+				name = trip.trip_name
+				print(f"\n\n\n\n IN LOOP GET_TRIP() name={name}")
+				trips.append(name)
+
+		return render_template("trips.html",
+								trip=trip,
+								name=name,
+								entries=entries,
+								user_id=user_id)
+	name = trip.trip_name
+	description = trip.description
+	entries = trip.entries
+	trips = []
+	user_id = trip.user_id
+	print(f"\n\n\n\n IN GET_TRIP() user_id={user_id}")
+	
+	if user_id == session["user_id"]:
+		for trip in trips:
+			trip_id = Trip.query.get(trip_id)
+			print(f"\n\n\n\n IN LOOP GET_TRIP() trip_id={trip_id}")
+			name = trip.trip_name
+			print(f"\n\n\n\n IN LOOP GET_TRIP() name={name}")
+			trips.append(name)
+
+		return render_template("trips.html",
+								trip=trip,
+								name=name,
+								description=description,
+								entries=entries,
+								user_id=user_id)
+
+	return redirect(f"/user_journal/{user_id}")
 
 # @app.route("/sandbox/<int:trip_id>")
 # def sandbox(trip_id):

@@ -10,16 +10,6 @@ from flask_sqlalchemy import SQLAlchemy, Model
 SQLALCHEMY_DATABASE_URI = "postgresql:///Travel_journaldb" # Unsure of what this does, also...table names or??
 db = SQLAlchemy()
 
-# 
-	# location_id = db.Column(db.Integer, db.ForeignKey("locations.location_id"))
-	# trip_id = db.Column(db.Integer, db.ForeignKey("trips.trip_id"))
-# locationTrips = db.Table("location_trips", 
-
-# 	db.Column("location_id", db.Integer, db.ForeignKey("location.location_id")),
-# 	db.Column("trip_id", db.Integer, db.ForeignKey("trip.trip_id")))
-
-
-
 class User(db.Model):
 	"""User of travel journal site"""
 
@@ -33,7 +23,7 @@ class User(db.Model):
 
 	def __repr__(self):
 
-		return f"<User fname={self.fname} email={self.email}>"
+		return f"<User user_id={self.user_id} email={self.email}>"
 
 
 class Trip(db.Model):
@@ -49,17 +39,26 @@ class Trip(db.Model):
 	entries = db.relationship("Entry", backref="trips")
 	locations = db.relationship("Location", secondary="locations_trips", backref="trips")
 
+	def __repr__(self):
+
+		return f"<Trip trip_id={self.trip_id} and user_id={self.user_id}>"
+
 class Location(db.Model): #for now this will just be a nice little box with saved info that appears
 	"""Locations of the trip."""  # visions of a 'clickable' button that would take user to another page with the spot pointed out in a map
 
 	__tablename__ = "locations"
 
 	location_id = db.Column(db.Integer, primary_key=True)
+	user_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))
 	name = db.Column(db.String(100), nullable=True)
 	address = db.Column(db.String(100), nullable=True)
 	city = db.Column(db.String(100), nullable=True)
 	state = db.Column(db.String(100), nullable=True)
 	country = db.Column(db.String(100), nullable=True)
+
+	def __repr__(self):
+
+		return f"<Location location_id={self.location_id} and user_id={self.user_id}>"
 
 	# trips = db.relationship("Trip", secondary="locations_trips", backref="locations") 
 
@@ -82,11 +81,20 @@ class Entry(db.Model):
 		return f"<Entry entry_id={self.entry_id}>"
 
 
+# user_trips = db.Table("locations_trips", 
+
+# 	db.Column("location_id", db.Integer, db.ForeignKey("locations.location_id"), primary_key=True),
+# 	db.Column("trip_id", db.Integer, db.ForeignKey("trips.trip_id"), primary_key=True))
+
+# user_locations = db.Table("locations_trips", 
+
+# 	db.Column("location_id", db.Integer, db.ForeignKey("locations.location_id"), primary_key=True),
+# 	db.Column("trip_id", db.Integer, db.ForeignKey("trips.trip_id"), primary_key=True))
+
 locations_trips = db.Table("locations_trips", 
 
 	db.Column("location_id", db.Integer, db.ForeignKey("locations.location_id"), primary_key=True),
 	db.Column("trip_id", db.Integer, db.ForeignKey("trips.trip_id"), primary_key=True))
-
 ###################################################################
 
 def connect_to_db(app):
