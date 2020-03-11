@@ -48,7 +48,7 @@ def registration():
 		db.session.commit()
 
 		user_id = new_user.user_id
-		print(f"\n\n\n\n IN REGIS user_id={user_id}")
+		app.logger.info(f"\n\n\n\n IN REGIS user_id={user_id}")
 		session["user_id"] = user_id
 	
 		flash("New user profile created!")
@@ -63,7 +63,7 @@ def login_process():
 
 	email = User.query.get(email).one()
 	user_id = User.query.get(user_id).one()
-	print(f"\n\n\n\n IN LOGIN_PROC user_id={user_id}")
+	app.logger.info(f"\n\n\n\n IN LOGIN_PROC user_id={user_id}")
 
 	if request.method == "POST":
 		email = request.form["email"]
@@ -106,7 +106,7 @@ def user_journal(user_id):
 	"""This is the user's journal homepage."""
 	
 	trips = Trip.query.filter_by(user_id=user_id).all()
-	print(f"\n\n\n\n IN USER_JOUR user_id={user_id}")
+	app.logger.info(f"\n\n\n\n IN USER_JOUR user_id={user_id}")
 	locations = []
 	for trip in trips:
 		for location in trip.locations:
@@ -128,17 +128,18 @@ def create_trip():
 	if request.method == "POST":
 
 		user_id = session["user_id"]
-		print(f"\n\n\n\n iN CREATE_TRIP user_id={user_id}")
+		app.logger.info(f"\n\n\n\n iN CREATE_TRIP user_id={user_id}")
 		trip_name = request.form["trip_name"]
 		description = request.form["description"]
-		print(f"\n\n\n\n user_id={user_id}")
+		app.logger.info(f"\n\n\n\n user_id={user_id}")
 		trip = Trip(trip_name=trip_name, description=description, user_id=user_id)
 
 		db.session.add(trip)
 		db.session.commit()
 		trip_id = trip.trip_id
-		print(f"\n\n\n\n IN CREATE_TRIP trip_id={trip_id}")
+		app.logger.info(f"\n\n\n\n IN CREATE_TRIP trip_id={trip_id}")
 		flash("Your trip has been added!")
+		session['trip_id'] = trip_id
 		return render_template("create_location.html") #create_trip/<int:trip_id>") #{trip.trip_id}") # want to save on page, reload just this
 
 	else:
@@ -147,13 +148,13 @@ def create_trip():
 	if request.method == "GET": #trying to separate out routes
 										#moved this to def get_trip()
 		user_id = session["user_id"]
-		print(f"\n\n\n\n IN CREATE_TRIP 'GET' user_id={user_id}")
+		app.logger.info(f"\n\n\n\n IN CREATE_TRIP 'GET' user_id={user_id}")
 		trips = []
 		for trip in trips:
 			trip_id = Trip.query.get(trip_id)
-			print(f"\n\n\n\n IN LOOP OF CREATE_TRIP 'GET' user_id={user_id}")
+			app.logger.info(f"\n\n\n\n IN LOOP OF CREATE_TRIP 'GET' user_id={user_id}")
 			name = trip.trip_name
-			print(f"\n\n\n\n name={name}")
+			app.logger.info(f"\n\n\n\n name={name}")
 			trips.append(name)
 
 	return redirect(f"/create_trip/{trip_id}")
@@ -163,21 +164,21 @@ def create_trip():
 def get_trip(trip_id):
 	"""Page for certain trip with locations and entries available"""
 	
-	print(f"\n\n\n\n IN GET_TRIP() trip_id={trip_id}")
+	app.logger.info(f"\n\n\n\n IN GET_TRIP() trip_id={trip_id}")
 	trip = Trip.query.get(trip_id) #returns query object, whole row of data
 	name = trip.trip_name
 	description = trip.description
 	entries = trip.entries
 	trips = []
 	user_id = trip.user_id
-	print(f"\n\n\n\n IN GET_TRIP() user_id={user_id}")
+	app.logger.info(f"\n\n\n\n IN GET_TRIP() user_id={user_id}")
 	
 	if user_id == session["user_id"]:
 		for trip in trips:
 			trip_id = Trip.query.get(trip_id)
-			print(f"\n\n\n\n IN LOOP GET_TRIP() trip_id={trip_id}")
+			app.logger.info(f"\n\n\n\n IN LOOP GET_TRIP() trip_id={trip_id}")
 			name = trip.trip_name
-			print(f"\n\n\n\n IN LOOP GET_TRIP() name={name}")
+			app.logger.info(f"\n\n\n\n IN LOOP GET_TRIP() name={name}")
 			trips.append(name)
 
 		return render_template("trips.html",
@@ -194,7 +195,7 @@ def add_location():
 
 	# if request.method == "POST":
 	user_id = session["user_id"]
-	print(f"\n\n\n\n IN ADD_LOCAT user_id={user_id}")
+	app.logger.info(f"\n\n\n\n IN ADD_LOCAT user_id={user_id}")
 	name = request.form["name"]
 	address = request.form["address"]
 	city = request.form["city"]
@@ -213,7 +214,7 @@ def add_location():
 	db.session.commit()
 
 	location_id = location.location_id
-	print(f"\n\n\n\n IN ADD_LOCAT location_id={location_id}")
+	app.logger.info(f"\n\n\n\n IN ADD_LOCAT location_id={location_id}")
 
 	flash("Your location has been added!")
 	return render_template("create_entry.html")
@@ -226,7 +227,7 @@ def get_location(user_id):
 	"""Search for a location."""
 
 
-	location = Location.query.get(trip_id) #assoc table
+	location = Location.query.get(location_id) 
 	trip =Trip.query.get(trip_id)
 	user_id = trip.user_id
 	name = location.name 
@@ -239,9 +240,9 @@ def get_location(user_id):
 	
 	if user_id == session["user_id"]:
 		for location in locations:
-			location = Location.query.get(trip_id)
+			location = Location.query.get(location_id)
 			name = location.name
-			print(f"\n\n\n\n IN GET_LOCAT name={name}")
+			app.logger.info(f"\n\n\n\n IN GET_LOCAT name={name}")
 			locations.append(location)
 		return render_template("trips.html",
 								trip=trip,
@@ -252,41 +253,35 @@ def get_location(user_id):
 								country=country)
 
 
-@app.route("/add_entry", methods=["GET", "POST"]) #<int:user_id>")
+@app.route("/add_entry", methods=["POST"]) #<int:user_id>") removed GET
 def add_entry():
 	"""This is where the user can add an entry to their trip."""
 	
-	trip = Trip.query.get(trip_id)
-	trip_id = trip.trip_id
-	print(f"\n\n\n\n IN ADD_ENTRY trip_id={trip_id}")
 	user_id = session["user_id"]
-	print(f"\n\n\n\n IN ADD_ENTRY user_id={user_id}")
+	# if request.method == "POST":
+	text = request.form["entry"]
 
-	if request.method == "POST":
-		entry = request.form["entry"]
-		entry = Entry(entry=entry)
+	entry = Entry(entry=text, user_id=session["user_id"], trip_id=session["trip_id"])
 
-		entry = Entry(entry=entry, trip_id=trip_id, user_id=user_id)
+	db.session.add(entry)
+	db.session.commit()
 
-		db.session.add(entry)
-		db.session.commit()
-
-		flash("Your entry has been added!")
-		return redirect(f"/user_journal/{user_id}")
-	else:
-		return redirect(f"/user_entry/{trip_id}")
+	flash("Your entry has been added!")
+	return redirect(f"/user_journal/{user_id}")
+	# else:
+	# 	return redirect(f"/user_entry/{trip_id}")
 
 @app.route("/user_entry/<int:user_id>")
 def get_entry(user_id):
 	"""Page for certain trip with locations and entries available"""
 	
-	entry = Entry.query.get(user_id)
+	entry_object = Entry.query.get(entry_id)
 	user_id = entries.user_id
 	entry_id = entries.entry_id
-	print(f"\n\n\n\n IN GET_ENTRY() user_id={user_id}")
+	app.logger.info(f"\n\n\n\n IN GET_ENTRY() user_id={user_id}")
 	trip = Trip.query.get(trip_id)
 	trip_id = entries.trip_id
-	print(f"\n\n\n\n IN GET_TRIP() trip_id={trip_id}")
+	app.logger.info(f"\n\n\n\n IN GET_TRIP() trip_id={trip_id}")
 	name = trip.trip_name
 	entry = entries.entry
 
@@ -295,9 +290,9 @@ def get_entry(user_id):
 	if user_id == session["user_id"]:
 		for entry in entries:
 			if entry_id:
-				print(f"\n\n\n\n IN LOOP GET_TRIP() trip_id={trip_id}")
+				app.logger.info(f"\n\n\n\n IN LOOP GET_TRIP() trip_id={trip_id}")
 				name = trip.trip_name
-				print(f"\n\n\n\n IN LOOP GET_TRIP() name={name}")
+				app.logger.info(f"\n\n\n\n IN LOOP GET_TRIP() name={name}")
 				trips.append(name)
 
 		return render_template("trips.html",
@@ -305,29 +300,7 @@ def get_entry(user_id):
 								name=name,
 								entries=entries,
 								user_id=user_id)
-	name = trip.trip_name
-	description = trip.description
-	entries = trip.entries
-	trips = []
-	user_id = trip.user_id
-	print(f"\n\n\n\n IN GET_TRIP() user_id={user_id}")
-	
-	if user_id == session["user_id"]:
-		for trip in trips:
-			trip_id = Trip.query.get(trip_id)
-			print(f"\n\n\n\n IN LOOP GET_TRIP() trip_id={trip_id}")
-			name = trip.trip_name
-			print(f"\n\n\n\n IN LOOP GET_TRIP() name={name}")
-			trips.append(name)
 
-		return render_template("trips.html",
-								trip=trip,
-								name=name,
-								description=description,
-								entries=entries,
-								user_id=user_id)
-
-	return redirect(f"/user_journal/{user_id}")
 
 # @app.route("/sandbox/<int:trip_id>")
 # def sandbox(trip_id):

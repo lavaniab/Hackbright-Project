@@ -36,7 +36,7 @@ class Trip(db.Model):
 	trip_name = db.Column(db.String(100), nullable=False)
 	description = db.Column(db.String(160), nullable=True)
 
-	entries = db.relationship("Entry", backref="trips")
+	entry = db.relationship("Entry", backref="trips")
 	locations = db.relationship("Location", secondary="locations_trips", backref="trips")
 
 	def __repr__(self):
@@ -74,7 +74,7 @@ class Entry(db.Model):
 	user_picture = db.Column(db.String(200), nullable=True) ## ref url for third party image hosting
 	
 	user = db.relationship("User", backref="entries")
-	#trips = db.relationship("Trip", backref="entries")
+	#trip = db.relationship("Trip", backref="entries")
 
 	def __repr__(self):
 
