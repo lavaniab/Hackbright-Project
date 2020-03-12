@@ -136,8 +136,8 @@ def create_trip():
 def get_trip(trip_id):
 	"""Search for a trip from a master list.****"""
 	
-	app.logger.info(f"\n\n\n\n IN GET_TRIP() trip_id={trip_id}")
-	trip = Trip.query.get(trip_id) #returns query object, whole row of data
+	
+	trip = Trip.query.get(trip_id)
 	name = trip.trip_name
 	description = trip.description
 	entries = trip.entries
@@ -154,10 +154,10 @@ def get_trip(trip_id):
 			trips.append(name)
 
 		return render_template("trips.html",
-								trip=trip,
-								name=name,
-								description=description,
-								user_id=user_id)
+							trip=trip,
+							name=name,
+							description=description,
+							user_id=user_id)
 
 @app.route("/select_trip")
 def select_trip():
@@ -239,7 +239,7 @@ def add_entry(trip_id):
 
 		entry = Entry(title=title,
 					entry=text,
-					user_id=user_id, #user_id=session["user_id"]
+					user_id=user_id, 
 					trip_id=trip_id)
 
 		db.session.add(entry)
@@ -251,10 +251,7 @@ def add_entry(trip_id):
 	else:
 		return render_template("create_entry.html",
 								trip_id=trip_id,
-								user_id=user_id) #added this to try to fix the 
-												 #get entry error of base query
-												 #has no object user_id
-
+								user_id=user_id)
 
 @app.route("/entry/<int:entry_id>")
 def get_entry(entry_id):

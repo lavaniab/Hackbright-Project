@@ -11,16 +11,21 @@
 <script src="http://code.jquery.com/jquery.js"></script>
 <link rel="stylesheet" href="static.css">
 <!-- <style> </style> -->
+
+<div>
+	<br>
+	<a href="/user_journal/{{session['user_id']}}">Return to Homepage</a>
+	<br>
+</div>
+
 </head> 
 
 <body>
-<!-- <nav "">
-	<div "" >
-		<a "" href="".</a>
-			</div>
--->
+
 {% block body %}
 
+
+<div>
 {% with messages = get_flashed_messages() %}
 	{% if message in messages %}
 		{% for message in messages %}
@@ -28,7 +33,7 @@
 		{% endfor %}
 	{% endif %}
 {% endwith %}
-
+</div>
 
 {% endblock %}
 </body>
