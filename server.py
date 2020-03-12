@@ -223,20 +223,6 @@ def get_location(location_id):
 	if location.user_id != session["user_id"]:
 		return redirect("/")
 
-	
-	# name = location.name 
-	# address = location.address
-	# city = location.city
-	# state = location.state
-	# country = location.country
-	
-	# locations = []
-	
-
-	# for trip in location.trips:
-	# 	#location = Location.query.get(location_id)
-	# 	name = location.name
-	# 	locations.append(name)
 	return render_template("locations.html",
 							location=location)
 
@@ -248,9 +234,13 @@ def add_entry(trip_id):
 	user_id = session["user_id"]
 
 	if request.method == "POST":
+		title = request.form["title"]
 		text = request.form["entry"]
 
-		entry = Entry(entry=text, user_id=session["user_id"], trip_id=trip_id)
+		entry = Entry(title=title,
+					entry=text,
+					user_id=user_id, #user_id=session["user_id"]
+					trip_id=trip_id)
 
 		db.session.add(entry)
 		db.session.commit()
@@ -259,38 +249,24 @@ def add_entry(trip_id):
 		return redirect(f"/user_journal/{user_id}")	
 
 	else:
-		return render_template("create_entry.html", trip_id=trip_id)
+		return render_template("create_entry.html",
+								trip_id=trip_id,
+								user_id=user_id) #added this to try to fix the 
+												 #get entry error of base query
+												 #has no object user_id
 
 
-# @app.route("/user_entry/<int:user_id>")
-# def get_entry(user_id):
-# 	"""Search for entries from a master list.****"""
-	
-# 	entry_object = Entry.query.get(entry_id)
-# 	user_id = entries.user_id
-# 	entry_id = entries.entry_id
-# 	app.logger.info(f"\n\n\n\n IN GET_ENTRY() user_id={user_id}")
-# 	trip = Trip.query.get(trip_id)
-# 	trip_id = entries.trip_id
-# 	app.logger.info(f"\n\n\n\n IN GET_TRIP() trip_id={trip_id}")
-# 	name = trip.trip_name
-# 	entry = entries.entry
+@app.route("/entry/<int:entry_id>")
+def get_entry(entry_id):
+	"""Search for entries from a master list.****"""
 
-# 	entries = []
-	
-# 	if user_id == session["user_id"]:
-# 		for entry in entries:
-# 			if entry_id:
-# 				app.logger.info(f"\n\n\n\n IN LOOP GET_TRIP() trip_id={trip_id}")
-# 				name = trip.trip_name
-# 				app.logger.info(f"\n\n\n\n IN LOOP GET_TRIP() name={name}")
-# 				trips.append(name)
+	entry = Entry.query.get(entry_id)
 
-# 		return render_template("trips.html",
-# 								trip=trip,
-# 								name=name,
-# 								entries=entries,
-# 								user_id=user_id)
+	if entry.user_id != session["user_id"]:
+		return redirect("/")
+
+	return render_template("entries.html",
+							entry=entry)
 
 
 # @app.route("/sandbox/<int:trip_id>")

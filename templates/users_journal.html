@@ -43,7 +43,7 @@
 	{% if entries %}
 	<ul>
 		{% for entry in entries %}
-		<li><a href="/user_entry/{{entry.entry_id}}">{{entry.entry}}</a></li>
+		<li><a href="/entry/{{entry.entry_id}}">{{entry.title}}</a></li>
 		{% endfor %}
 	</ul>
 	{% endif %}
