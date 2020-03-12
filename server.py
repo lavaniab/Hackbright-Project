@@ -1,6 +1,8 @@
 from jinja2 import StrictUndefined
 
 from flask import Flask, render_template, request, flash, redirect, session
+from datetime import datetime
+import time
 from flask_debugtoolbar import DebugToolbarExtension
 from model import connect_to_db, db, User, Entry, Trip, Location
 
@@ -77,13 +79,7 @@ def user_journal(user_id):
 	"""This is the user's journal homepage."""
 	
 	trips = Trip.query.filter_by(user_id=user_id).all()
-	app.logger.info(f"\n\n\n\n IN USER_JOUR user_id={user_id}")
 	locations = Location.query.filter_by(user_id=user_id).all()
-	# locations = []
-	# for trip in trips:
-	# 	for location in trip.locations:
-	# 		locations.append(location)
-	
 	entries = Entry.query.filter_by(user_id=user_id).all()
 
 	return render_template("users_journal.html",
@@ -100,33 +96,28 @@ def create_trip():
 	if request.method == "POST":
 
 		user_id = session["user_id"]
-		app.logger.info(f"\n\n\n\n iN CREATE_TRIP user_id={user_id}")
 		trip_name = request.form["trip_name"]
 		description = request.form["description"]
-		app.logger.info(f"\n\n\n\n user_id={user_id}")
 		trip = Trip(trip_name=trip_name, description=description, user_id=user_id)
 
 		db.session.add(trip)
 		db.session.commit()
 		trip_id = trip.trip_id
-		app.logger.info(f"\n\n\n\n IN CREATE_TRIP trip_id={trip_id}")
 		flash("Your trip has been added!")
-		#session['trip_id'] = trip_id
-		return redirect(f"/user_journal/{user_id}") #create_trip/<int:trip_id>") #{trip.trip_id}") # want to save on page, reload just this
+
+		return redirect(f"/user_journal/{user_id}") 
 
 	else:
 		return render_template("create_trip.html")
 
-	if request.method == "GET": #trying to separate out routes
-										#moved this to def get_trip()
+	if request.method == "GET": 
+										
 		user_id = session["user_id"]
-		app.logger.info(f"\n\n\n\n IN CREATE_TRIP 'GET' user_id={user_id}")
+		
 		trips = []
 		for trip in trips:
 			trip_id = Trip.query.get(trip_id)
-			app.logger.info(f"\n\n\n\n IN LOOP OF CREATE_TRIP 'GET' user_id={user_id}")
 			name = trip.trip_name
-			app.logger.info(f"\n\n\n\n name={name}")
 			trips.append(name)
 
 	return redirect(f"/create_trip/{trip_id}")
@@ -143,14 +134,11 @@ def get_trip(trip_id):
 	entries = trip.entries
 	trips = []
 	user_id = trip.user_id
-	app.logger.info(f"\n\n\n\n IN GET_TRIP() user_id={user_id}")
 	
-	if user_id: # if user_id == session["user_id"]
+	if user_id: 
 		for trip in trips:
 			trip_id = Trip.query.get(trip_id)
-			app.logger.info(f"\n\n\n\n IN LOOP GET_TRIP() trip_id={trip_id}")
 			name = trip.trip_name
-			app.logger.info(f"\n\n\n\n IN LOOP GET_TRIP() name={name}")
 			trips.append(name)
 
 		return render_template("trips.html",
@@ -180,7 +168,6 @@ def add_location(trip_id):
 
 	if request.method == "POST":
 		user_id = session["user_id"]
-		app.logger.info(f"\n\n\n\n IN ADD_LOCAT user_id={user_id}")
 		name = request.form["name"]
 		address = request.form["address"]
 		city = request.form["city"]
@@ -201,9 +188,6 @@ def add_location(trip_id):
 		db.session.commit()
 
 		location_id = location.location_id
-		app.logger.info(f"\n\n\n\n IN ADD_LOCAT location_id={location_id}")
-
-
 
 		flash("Your location has been added!")
 		return redirect(f"/user_journal/{user_id}")
@@ -232,15 +216,20 @@ def add_entry(trip_id):
 	"""This is where the user can add an entry to their trip."""
 	
 	user_id = session["user_id"]
-
+	
 	if request.method == "POST":
 		title = request.form["title"]
 		text = request.form["entry"]
+		all_numbers = datetime.now().timestamp()
+		#time_stamp = datetime.fromtimestamp(all_numbers)
+		time_stamp = time.ctime(all_numbers)
+		print(f"LOOOOOOK HERRRRE time_stamp = {time_stamp}")
 
 		entry = Entry(title=title,
 					entry=text,
 					user_id=user_id, 
-					trip_id=trip_id)
+					trip_id=trip_id,
+					time_stamp=time_stamp)
 
 		db.session.add(entry)
 		db.session.commit()
@@ -258,12 +247,14 @@ def get_entry(entry_id):
 	"""Search for entries from a master list.****"""
 
 	entry = Entry.query.get(entry_id)
-
+	#time_stamp = time_stamp = datetime.now().timestamp()
+	#shows up but isn't saved to the entry.
 	if entry.user_id != session["user_id"]:
 		return redirect("/")
 
 	return render_template("entries.html",
 							entry=entry)
+							#time_stamp=time_stamp)
 
 
 # @app.route("/sandbox/<int:trip_id>")

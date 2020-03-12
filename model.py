@@ -1,8 +1,8 @@
 """Models and database functions for Travel Journal"""
 from flask import Flask 
+from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy, Model
-#import correlation
-#from collections import defaultdict
+
 
 #This is the connection to PostgreSQL database from library
 #Find session object within where we do most of our interactions (like committing)
@@ -72,6 +72,7 @@ class Entry(db.Model):
 	trip_id = db.Column(db.Integer, db.ForeignKey("trips.trip_id"))
 	title = db.Column(db.String(100), nullable = False)
 	entry = db.Column(db.String(), nullable=False)
+	time_stamp = db.Column(db.DateTime(), server_default=db.func.now(), server_onupdate=db.func.now())
 	user_picture = db.Column(db.String(200), nullable=True) ## ref url for third party image hosting
 	
 	user = db.relationship("User", backref="entries")
@@ -81,16 +82,6 @@ class Entry(db.Model):
 
 		return f"<Entry entry_id={self.entry_id}>"
 
-
-# user_trips = db.Table("locations_trips", 
-
-# 	db.Column("location_id", db.Integer, db.ForeignKey("locations.location_id"), primary_key=True),
-# 	db.Column("trip_id", db.Integer, db.ForeignKey("trips.trip_id"), primary_key=True))
-
-# user_locations = db.Table("locations_trips", 
-
-# 	db.Column("location_id", db.Integer, db.ForeignKey("locations.location_id"), primary_key=True),
-# 	db.Column("trip_id", db.Integer, db.ForeignKey("trips.trip_id"), primary_key=True))
 
 locations_trips = db.Table("locations_trips", 
 

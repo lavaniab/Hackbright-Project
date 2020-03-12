@@ -12,18 +12,27 @@
 <link rel="stylesheet" href="static.css">
 <!-- <style> </style> -->
 
-<div>
-	<br>
-	<a href="/user_journal/{{session['user_id']}}">Return to Homepage</a>
-	<br>
-</div>
-
+<nav class="navbar navbar-light bg-light">
+  <form class="form-inline">
+    <button class="btn btn-outline-success" type="button">User's Journal</button>
+    <br>
+    <br>
+    <br>
+    <button class="btn btn-sm btn-outline-secondary" type="button">Logout</button>
+  </form>
+</nav>
 </head> 
 
 <body>
 
 {% block body %}
 
+<nav class="navbar navbar-light bg-light">
+  <form class="form-inline">
+    <button class="btn btn-outline-success" type="button">User's Journal</button>
+    <button class="btn btn-sm btn-outline-secondary" type="button">Logout</button>
+  </form>
+</nav>
 
 <div>
 {% with messages = get_flashed_messages() %}
