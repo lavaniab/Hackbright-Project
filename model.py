@@ -70,6 +70,7 @@ class Entry(db.Model):
 	entry_id = db.Column(db.Integer, primary_key=True)
 	user_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))
 	trip_id = db.Column(db.Integer, db.ForeignKey("trips.trip_id"))
+	title = db.Column(db.String(100), nullable = False)
 	entry = db.Column(db.String(), nullable=False)
 	user_picture = db.Column(db.String(200), nullable=True) ## ref url for third party image hosting
 	
