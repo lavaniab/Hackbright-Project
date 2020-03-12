@@ -72,7 +72,7 @@ class Entry(db.Model):
 	trip_id = db.Column(db.Integer, db.ForeignKey("trips.trip_id"))
 	title = db.Column(db.String(100), nullable = False)
 	entry = db.Column(db.String(), nullable=False)
-	time_stamp = db.Column(db.DateTime(), server_default=db.func.now(), server_onupdate=db.func.now())
+	time_stamp = db.Column(db.String()) # server_default=db.func.now(), server_onupdate=db.func.now())
 	user_picture = db.Column(db.String(200), nullable=True) ## ref url for third party image hosting
 	
 	user = db.relationship("User", backref="entries")

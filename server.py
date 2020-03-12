@@ -222,7 +222,7 @@ def add_entry(trip_id):
 		text = request.form["entry"]
 		all_numbers = datetime.now().timestamp()
 		#time_stamp = datetime.fromtimestamp(all_numbers)
-		time_stamp = time.ctime(all_numbers)
+		time_stamp = time.ctime(all_numbers)#.__str__()
 		print(f"LOOOOOOK HERRRRE time_stamp = {time_stamp}")
 
 		entry = Entry(title=title,
