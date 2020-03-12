@@ -14,14 +14,14 @@
 	{% if trips %}
 	<ul>
 		{% for trip in trips %}
-		<li><a href="/create_trip/{{trip.trip_id}}">{{trip.trip_name}}</a></li>
+		<li><a href="/trip/{{trip.trip_id}}">{{trip.trip_name}}</a></li>
 		{% endfor %}
 	</ul>
 	{% endif %}
 </div>
 
 <div>
-<a href="/select_trip">Add a location to a trip</a>
+<a href="/select_trip?next_route=add_location">Add a location to a Trip</a>
 </div>
  <div class="container">
 	<p>View Locations</p>
@@ -35,7 +35,7 @@
 </div>
 
 <div>
-<a href="/add_entry">Add an entry to a Trip</a>
+<a href="/select_trip?next_route=add_entry">Add an entry to a Trip</a>
 </div>
 
 <div class="container">
