@@ -1,4 +1,5 @@
 """Models and database functions for Travel Journal"""
+
 from flask import Flask 
 from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy, Model
@@ -43,8 +44,9 @@ class Trip(db.Model):
 
 		return f"<Trip trip_id={self.trip_id} and user_id={self.user_id}>"
 
-class Location(db.Model): #for now this will just be a nice little box with saved info that appears
-	"""Locations of the trip."""  # visions of a 'clickable' button that would take user to another page with the spot pointed out in a map
+
+class Location(db.Model):
+	"""Locations of the trip."""
 
 	__tablename__ = "locations"
 
@@ -60,7 +62,6 @@ class Location(db.Model): #for now this will just be a nice little box with save
 
 		return f"<Location location_id={self.location_id} and user_id={self.user_id}>"
 
-	# trips = db.relationship("Trip", secondary="locations_trips", backref="locations") 
 
 class Entry(db.Model):
 	"""Entry table for all the entries for a user."""
@@ -72,8 +73,8 @@ class Entry(db.Model):
 	trip_id = db.Column(db.Integer, db.ForeignKey("trips.trip_id"))
 	title = db.Column(db.String(100), nullable = False)
 	entry = db.Column(db.String(), nullable=False)
-	time_stamp = db.Column(db.String()) # server_default=db.func.now(), server_onupdate=db.func.now())
-	user_picture = db.Column(db.String(200), nullable=True) ## ref url for third party image hosting
+	time_stamp = db.Column(db.String())
+	user_picture = db.Column(db.String(), nullable=True) ## ref url for third party image hosting
 	
 	user = db.relationship("User", backref="entries")
 	

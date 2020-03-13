@@ -9,6 +9,7 @@ import cloudinary
 import cloudinary.uploader
 import cloudinary.api
 from cloudinary.uploader import upload
+#from cloudinary.utils import url_from
 
 app = Flask(__name__)
 
@@ -66,7 +67,7 @@ def registration():
 def login_process():
 	"""Have a user login."""
 		
-	user = User.query.filter_by(email=request.form.get('email')).one()
+	user = User.query.filter_by(email=request.form.get('email')).first()
 	user_id = user.user_id
 	if user.password == (request.form.get('password')):
 		session['user_id'] = user.user_id
@@ -231,16 +232,21 @@ def add_entry(trip_id):
 	if request.method == "POST":
 		title = request.form["title"]
 		text = request.form["entry"]
+		upload = request.files["file"]
+
 		all_numbers = datetime.now().timestamp()
-		#time_stamp = datetime.fromtimestamp(all_numbers)
-		time_stamp = time.ctime(all_numbers)#.__str__()
-		print(f"LOOOOOOK HERRRRE time_stamp = {time_stamp}")
+		time_stamp = time.ctime(all_numbers)
+
+		uploaded_file_info = cloudinary.uploader.upload(upload)
+		image_url = uploaded_file_info['secure_url']
+
 
 		entry = Entry(title=title,
 					entry=text,
 					user_id=user_id, 
 					trip_id=trip_id,
-					time_stamp=time_stamp)
+					time_stamp=time_stamp,
+					user_picture=image_url)
 
 		db.session.add(entry)
 		db.session.commit()
@@ -258,22 +264,26 @@ def get_entry(entry_id):
 	"""Search for entries from a master list.****"""
 
 	entry = Entry.query.get(entry_id)
-	#time_stamp = time_stamp = datetime.now().timestamp()
-	#shows up but isn't saved to the entry.
+	
 	if entry.user_id != session["user_id"]:
 		return redirect("/")
 
 	return render_template("entries.html",
 							entry=entry)
-							#time_stamp=time_stamp)
+							
 
-@app.route("/upload")
-def upload_image():
+# @app.route("/upload")
+# def upload_image():
 
-	upload = "templates/test-photo.jpg"
-	cloudinary.uploader.upload(upload)
+# 	upload = "static/images/test-photo.jpg"
+# 	cloudinary.uploader.upload(upload)
 
-	return render_template("pictures.html")
+# 	# file = request.files["new_item"]
+#  #    filename = secure_filename(file.filename)
+#  #    uploaded_file_info = cloudinary.uploader.upload(file)
+#  #    image_url = uploaded_file_info['secure_url']
+
+# 	return render_template("pictures.html")
 
 # @app.route("/sandbox/<int:trip_id>")
 # def sandbox(trip_id):
