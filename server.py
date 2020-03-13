@@ -6,6 +6,9 @@ import time
 from flask_debugtoolbar import DebugToolbarExtension
 from model import connect_to_db, db, User, Entry, Trip, Location
 import cloudinary
+import cloudinary.uploader
+import cloudinary.api
+from cloudinary.uploader import upload
 
 app = Flask(__name__)
 
@@ -268,7 +271,7 @@ def get_entry(entry_id):
 def upload_image():
 
 	upload = "templates/test-photo.jpg"
-	cloudinary.upload(upload)
+	cloudinary.uploader.upload(upload)
 
 	return render_template("pictures.html")
 
