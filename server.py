@@ -5,10 +5,18 @@ from datetime import datetime
 import time
 from flask_debugtoolbar import DebugToolbarExtension
 from model import connect_to_db, db, User, Entry, Trip, Location
+import cloudinary
 
 app = Flask(__name__)
 
 app.config.from_pyfile('config.py')
+
+cloudinary.config(
+  cloud_name = app.config['CLOUDINARY_CLOUD_NAME'],  
+  api_key = app.config['CLOUDINARY_API_KEY'],  
+  api_secret = app.config['CLOUDINARY_API_SECRET']  
+)
+
 
 # Raises an error so an undefined variable doesn't fail silently
 app.jinja_env.undefined = StrictUndefined
@@ -256,6 +264,13 @@ def get_entry(entry_id):
 							entry=entry)
 							#time_stamp=time_stamp)
 
+@app.route("/upload")
+def upload_image():
+
+	upload = "templates/test-photo.jpg"
+	cloudinary.upload(upload)
+
+	return render_template("pictures.html")
 
 # @app.route("/sandbox/<int:trip_id>")
 # def sandbox(trip_id):
