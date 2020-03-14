@@ -152,7 +152,7 @@ def get_trip(trip_id):
 			name = trip.trip_name
 			trips.append(name)
 
-		return render_template("trips.html",
+		return render_template("trip.html",
 							trip=trip,
 							name=name,
 							description=description,
@@ -284,10 +284,12 @@ def get_entry(entry_id):
 
 # 	return render_template("pictures.html")
 
-# @app.route("/sandbox/<int:trip_id>")
-# def sandbox(trip_id):
-# 	entry = Entry.query.filter_by(trip_id=trip_id).first()
-# 	return(f"{entry.entry}")
+@app.route("/all_trips/<int:user_id>")
+def sandbox(user_id):
+	
+	trips = Trip.query.filter_by(user_id=user_id)
+
+	return(f"trips.trip_id")
 
 if __name__ == '__main__':
 
