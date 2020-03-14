@@ -125,13 +125,13 @@ def create_trip():
 										
 		user_id = session["user_id"]
 		
-		trips = []
-		for trip in trips:
-			trip_id = Trip.query.get(trip_id)
-			name = trip.trip_name
-			trips.append(name)
+		# trips = []
+		# for trip in trips:
+		# 	trip_id = Trip.query.get(trip_id)
+		# 	name = trip.trip_name
+		# 	trips.append(name)
 
-	return redirect(f"/create_trip/{trip_id}")
+		return redirect(f"/create_trip/{trip_id}") #this was aligned with if statement,why did it work??
 
 
 @app.route("/trip/<int:trip_id>")
@@ -157,6 +157,32 @@ def get_trip(trip_id):
 							name=name,
 							description=description,
 							user_id=user_id)
+
+
+@app.route("/all_trips/<int:trip_id>")
+def all_trips(trip_id):
+	
+	trip = Trip.query.get(trip_id)
+	user_id = session["user_id"]
+	trip_id = trip.trip_id
+	name = trip.trip_name
+
+	trips = []
+	
+	if user_id:
+		for trip in trips:
+			trip_id = Trip.query.get(trip_id)
+			name = trip.trip_name
+			print(f"NAME = {name}!!!!!!!!!!!!!!!!")
+			trips.append(name)
+
+		return render_template("all_trips.html",
+								trip=trip,
+								name=name,
+								trips=trips,
+								trip_id=trip_id)
+	else:
+		return redirect("/select_trip")
 
 @app.route("/select_trip")
 def select_trip():
@@ -284,12 +310,7 @@ def get_entry(entry_id):
 
 # 	return render_template("pictures.html")
 
-@app.route("/all_trips/<int:user_id>")
-def sandbox(user_id):
-	
-	trips = Trip.query.filter_by(user_id=user_id)
 
-	return(f"trips.trip_id")
 
 if __name__ == '__main__':
 

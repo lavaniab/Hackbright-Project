@@ -39,6 +39,7 @@ class Trip(db.Model):
 
 	entries = db.relationship("Entry", backref="trips")
 	locations = db.relationship("Location", secondary="locations_trips", backref="trips")
+	trips = db.relationship("User", backref="trips")
 
 	def __repr__(self):
 

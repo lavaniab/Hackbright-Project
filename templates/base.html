@@ -23,15 +23,13 @@
       </div>
       {% if 'user_id' in session %}
       <ul class="nav navbar-nav">
-        <li class="active"><a href="/user_journal/{{user_id}}">User's Journal</a></li>
+        <li class="active"><a href="/user_journal/{{session['user_id']}}">User's Journal</a></li>
         <br>
-        <li><br><a href="/all_trips/{{user_id}}">Trips</a></li>
+        <li><br><a href="/all_trips/{{session['user_id']}}">Trips</a></li>
         <br>
         <li><a href="/logout">Logout</a></li>
         <br>
-<!--         <li><br><a href="#">Entries</a></li>
-        <br>
-        <li><a href="#">Pictures</a></li> -->
+        <li><br><a href="#">Pictures</a></li>
       </ul>
       {% endif %}
     </div>
