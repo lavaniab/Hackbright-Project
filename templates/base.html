@@ -7,32 +7,42 @@
 
 <!-- Bootstrap link -->
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-<!-- link any font style api here too -->
 <script src="http://code.jquery.com/jquery.js"></script>
+<script></script>
 <link rel="stylesheet" href="static.css">
-<!-- <style> </style> -->
 
-<nav class="navbar navbar-light bg-light">
-  <form class="form-inline">
-    <button class="btn btn-outline-success" type="button">User's Journal</button>
-    <br>
-    <br>
-    <br>
-    <button class="btn btn-sm btn-outline-secondary" type="button">Logout</button>
-  </form>
-</nav>
 </head> 
 
 <body>
 
+<header>
+  <div class="navbar navbar-expand-md navbar-dark bg-dark">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="/">Travel Journal</a>
+      </div>
+      {% if 'user_id' in session %}
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="/user_journal/{{user_id}}">User's Journal</a></li>
+        <br>
+        <li><br><a href="#">Trips</a></li>
+        <br>
+        <li><a href="#">Locations</a></li>
+        <br>
+        <li><br><a href="#">Entries</a></li>
+        <br>
+        <li><a href="#">Pictures</a></li>
+      </ul>
+      {% endif %}
+    </div>
+  </div>
+</header>
+
+<main role="main">
 {% block body %}
 
-<nav class="navbar navbar-light bg-light">
-  <form class="form-inline">
-    <button class="btn btn-outline-success" type="button">User's Journal</button>
-    <button class="btn btn-sm btn-outline-secondary" type="button">Logout</button>
-  </form>
-</nav>
+
+
 
 <div>
 {% with messages = get_flashed_messages() %}
@@ -45,5 +55,6 @@
 </div>
 
 {% endblock %}
+</main>
 </body>
 </html>

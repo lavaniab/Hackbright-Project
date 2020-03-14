@@ -9,7 +9,6 @@ import cloudinary
 import cloudinary.uploader
 import cloudinary.api
 from cloudinary.uploader import upload
-#from cloudinary.utils import url_from
 
 app = Flask(__name__)
 
