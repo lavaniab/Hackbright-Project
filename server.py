@@ -159,30 +159,30 @@ def get_trip(trip_id):
 							user_id=user_id)
 
 
-@app.route("/all_trips/<int:trip_id>")
-def all_trips(trip_id):
+# @app.route("/all_trips/<int:trip_id>")
+# def all_trips(trip_id):
 	
-	trip = Trip.query.get(trip_id)
-	user_id = session["user_id"]
-	trip_id = trip.trip_id
-	name = trip.trip_name
+# 	trip = Trip.query.get(trip_id)
+# 	user_id = session["user_id"]
+# 	trip_id = trip.trip_id
+# 	name = trip.trip_name
 
-	trips = []
+# 	trips = []
 	
-	if user_id:
-		for trip in trips:
-			trip_id = Trip.query.get(trip_id)
-			name = trip.trip_name
-			print(f"NAME = {name}!!!!!!!!!!!!!!!!")
-			trips.append(name)
+# 	if user_id:
+# 		for trip in trips:
+# 			trip_id = Trip.query.get(trip_id)
+# 			name = trip.trip_name
+# 			print(f"NAME = {name}!!!!!!!!!!!!!!!!")
+# 			trips.append(name)
 
-		return render_template("all_trips.html",
-								trip=trip,
-								name=name,
-								trips=trips,
-								trip_id=trip_id)
-	else:
-		return redirect("/select_trip")
+# 		return render_template("all_trips.html",
+# 								trip=trip,
+# 								name=name,
+# 								trips=trips,
+# 								trip_id=trip_id)
+# 	else:
+# 		return redirect("/select_trip")
 
 @app.route("/select_trip")
 def select_trip():
