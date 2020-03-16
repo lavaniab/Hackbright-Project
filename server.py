@@ -81,7 +81,7 @@ def login_process():
 def logout():
 	"""User logout."""
 
-	del session["email"]
+	del session["user_id"]
 	flash("Logged out.")
 	return redirect(f"/")
 
@@ -124,12 +124,6 @@ def create_trip():
 	if request.method == "GET": 
 										
 		user_id = session["user_id"]
-		
-		# trips = []
-		# for trip in trips:
-		# 	trip_id = Trip.query.get(trip_id)
-		# 	name = trip.trip_name
-		# 	trips.append(name)
 
 		return redirect(f"/create_trip/{trip_id}") #this was aligned with if statement,why did it work??
 
@@ -143,8 +137,9 @@ def get_trip(trip_id):
 	name = trip.trip_name
 	description = trip.description
 	entries = trip.entries
-	trips = []
 	user_id = trip.user_id
+	trips = []
+	
 	
 	if user_id: 
 		for trip in trips:
@@ -159,30 +154,21 @@ def get_trip(trip_id):
 							user_id=user_id)
 
 
-# @app.route("/all_trips/<int:trip_id>")
-# def all_trips(trip_id):
+@app.route("/pictures")
+def pictures():
 	
-# 	trip = Trip.query.get(trip_id)
-# 	user_id = session["user_id"]
-# 	trip_id = trip.trip_id
-# 	name = trip.trip_name
-
-# 	trips = []
+	user_id = session["user_id"]
+	trips = Trip.query.filter_by(user_id=user_id).all()
+	entries = Entry.query.filter_by(user_id=user_id).all()
+	pictures = map(lambda entry: entry.user_picture, entries) 
 	
-# 	if user_id:
-# 		for trip in trips:
-# 			trip_id = Trip.query.get(trip_id)
-# 			name = trip.trip_name
-# 			print(f"NAME = {name}!!!!!!!!!!!!!!!!")
-# 			trips.append(name)
+	if user_id:
 
-# 		return render_template("all_trips.html",
-# 								trip=trip,
-# 								name=name,
-# 								trips=trips,
-# 								trip_id=trip_id)
-# 	else:
-# 		return redirect("/select_trip")
+		return render_template("pictures.html",
+								pictures=pictures)
+	else:
+		return redirect("/select_trip")
+
 
 @app.route("/select_trip")
 def select_trip():
@@ -297,18 +283,9 @@ def get_entry(entry_id):
 							entry=entry)
 							
 
-# @app.route("/upload")
+# @app.route("/upload") #sandbox
 # def upload_image():
 
-# 	upload = "static/images/test-photo.jpg"
-# 	cloudinary.uploader.upload(upload)
-
-# 	# file = request.files["new_item"]
-#  #    filename = secure_filename(file.filename)
-#  #    uploaded_file_info = cloudinary.uploader.upload(file)
-#  #    image_url = uploaded_file_info['secure_url']
-
-# 	return render_template("pictures.html")
 
 
 
