@@ -53,7 +53,6 @@ def registration():
 		db.session.commit()
 
 		user_id = new_user.user_id
-		app.logger.info(f"\n\n\n\n IN REGIS user_id={user_id}")
 		session["user_id"] = user_id
 	
 		flash("New user profile created!")
@@ -125,7 +124,7 @@ def create_trip():
 										
 		user_id = session["user_id"]
 
-		return redirect(f"/create_trip/{trip_id}") #this was aligned with if statement,why did it work??
+		return redirect(f"/create_trip/{trip_id}")
 
 
 @app.route("/trip/<int:trip_id>")
@@ -156,7 +155,7 @@ def get_trip(trip_id):
 
 @app.route("/pictures")
 def pictures():
-	
+	 
 	user_id = session["user_id"]
 	trips = Trip.query.filter_by(user_id=user_id).all()
 	entries = Entry.query.filter_by(user_id=user_id).all()
