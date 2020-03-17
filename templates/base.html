@@ -1,4 +1,6 @@
+
 <!DOCTYPE html>
+
 <html>
 <head>
 	<title>
@@ -8,8 +10,26 @@
 <!-- Bootstrap link -->
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 <script src="http://code.jquery.com/jquery.js"></script>
+<script>
+    $( document ).ready(function() {
+        console.log( "document loaded" );
+    });
+ 
+    $( window ).on( "load", function() {
+        console.log( "window loaded" );
+    });
+</script>
 <script></script>
 <link rel="stylesheet" href="static.css">
+<!-- Development -->
+<script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.min.js"></script>
+<script src="https://unpkg.com/tippy.js@6/dist/tippy-bundle.umd.js"></script>
+
+<!-- Production -->
+<script src="https://unpkg.com/@popperjs/core@2"></script>
+<script src="https://unpkg.com/tippy.js@6"></script>
+
+
 
 </head> 
 
@@ -51,6 +71,9 @@
 	{% endif %}
 {% endwith %}
 </div>
+
+
+<script src="/script.js" type="text/javascript" />
 
 {% endblock %}
 </main>
