@@ -9,8 +9,12 @@
 
 
 <div>
-	<a id="myButton" href="/create_trip">Create a Trip</a>
+	<a data-tippy-content="Tooltip" href="/create_trip">Create a Trip</a>
 </div>
+
+
+<button data-tippy-content="Tooltip">Text</button>
+<script>tippy(document.querySelectorAll("button"));</script>
 
 <!-- <div class="container">
 	<p>View Trips</p>

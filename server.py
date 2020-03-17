@@ -3,7 +3,7 @@ from jinja2 import StrictUndefined
 from flask import Flask, render_template, request, flash, redirect, session
 from datetime import datetime
 import time
-from flask_debugtoolbar import DebugToolbarExtension
+#from flask_debugtoolbar import DebugToolbarExtension
 from model import connect_to_db, db, User, Entry, Trip, Location
 import cloudinary
 import cloudinary.uploader
@@ -294,6 +294,6 @@ if __name__ == '__main__':
 
 	connect_to_db(app)
 
-	DebugToolbarExtension(app)
+	#DebugToolbarExtension(app)
 
 	app.run(host='0.0.0.0')
