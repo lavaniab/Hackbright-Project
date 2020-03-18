@@ -87,7 +87,7 @@ def logout():
 @app.route("/user_journal/<int:user_id>")
 def user_journal(user_id):
 	"""This is the user's journal homepage."""
-	
+	 
 	trips = Trip.query.filter_by(user_id=user_id).all()
 	locations = Location.query.filter_by(user_id=user_id).all()
 	entries = Entry.query.filter_by(user_id=user_id).all()
@@ -233,7 +233,7 @@ def get_location(location_id):
 							location=location)
 
 
-@app.route("/add_entry/<int:trip_id>", methods=["GET", "POST"]) #<int:user_id>") removed GET
+@app.route("/add_entry/<int:trip_id>", methods=["GET", "POST"])
 def add_entry(trip_id):
 	"""This is where the user can add an entry to their trip."""
 	
