@@ -3,7 +3,7 @@ from jinja2 import StrictUndefined
 from flask import Flask, render_template, request, flash, redirect, session, jsonify
 from datetime import datetime
 import time
-from flask_debugtoolbar import DebugToolbarExtension
+#from flask_debugtoolbar import DebugToolbarExtension
 from model import connect_to_db, db, User, Entry, Trip, Location, Note
 import cloudinary
 import cloudinary.uploader
@@ -97,7 +97,8 @@ def user_journal(user_id):
 						   trips=trips,
 						   user_id=user_id,
 						   locations=locations,
-						   entries=entries)
+						   entries=entries,
+						   notes=notes)
 
 
 @app.route("/create_trip", methods=["GET","POST"])
@@ -282,8 +283,8 @@ def get_entry(entry_id):
 	return render_template("entries.html",
 							entry=entry)
 
-@app.route("/add_note/<int:user_id>", methods=["GET", "POST"])
-def add_note(user_id):
+@app.route("/add_note", methods=["GET", "POST"])
+def add_note():
 
 	user_id = session["user_id"]
 
@@ -297,37 +298,40 @@ def add_note(user_id):
 		db.session.add(new_note)
 		db.session.commit()
 
-		return redirect(f"/user_journal/{user_id}")
+		return jsonify({"note_id": new_note.note_id, "note": new_note.note})
+		# return redirect(f"/user_journal/{user_id}")
 	else:
 		return redirect(f"/")
 							
 
-# @app.route("/????/<int:note_id>")
-# def get_note(note_id):
-# 	"""Search for entries from a master list.****"""
+@app.route("/????/<int:note_id>")
+def get_note(note_id):
+	"""Search for entries from a master list.****"""
 
-# 	note_obj = Note.query.get(note_id)
-# 	note = note_obj.note
+	note_obj = Note.query.get(note_id)
+	note = note_obj.note
 	
-# 	if note.user_id != session["user_id"]:
-# 		return jsonify({note})
+	if note.user_id != session["user_id"]:
+		return jsonify({note})
 
-# 	return jsonify({"no new note"})
+	return jsonify({"no new note"})
+
 
 # @app.route("/upload") #sandbox
 # def upload_image():
 
-# <!-- <div class="container">
-# 	<p>Notes</p>
-# 	{% if notes %}
-# 	<ul>
-# 		{% for note in notes %}
-# 		<li><a href="/????/{{note_id}}">{{note}}</a></li>
-# 		{% endfor %}
-# 	</ul>
-# 	{% endif %}
-# </div>
-#  -->
+@app.after_request
+def add_header(r):
+    """
+    Add headers to both force latest IE rendering engine or Chrome Frame,
+    and also to cache the rendered page for 10 minutes.
+    """
+    r.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    r.headers["Pragma"] = "no-cache"
+    r.headers["Expires"] = "0"
+    r.headers['Cache-Control'] = 'public, max-age=0'
+    return r
+
 
 
 if __name__ == '__main__':
@@ -336,6 +340,6 @@ if __name__ == '__main__':
 
 	connect_to_db(app)
 
-	DebugToolbarExtension(app)
+	#DebugToolbarExtension(app)
 
 	app.run(host='0.0.0.0')

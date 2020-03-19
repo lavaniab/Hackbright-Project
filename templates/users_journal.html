@@ -35,13 +35,23 @@
 	<input type="text" name="description"><br>
 </div> -->
 
-<form  action="/add_note/{{user_id}}"  class="btn btn-outline-success" role="button" method="POST" enctype="multipart/form-data">
+<form id="addNoteForm" action="/add_note"  class="btn btn-outline-success" role="button" method="POST" enctype="multipart/form-data">
 	<h6>Add a note</h6><br>
 	<br>
 	<input type="text" name="note" id="note"><br>
 	<input type="submit" class="btn btn-outline-success"><br>
 </form>
 
+<div class="container">
+	<p>Notes</p>
+	<ul id="allTheNotes">
+		{% if notes %}
+		{% for note in notes %}
+		<li>{{note.note}}</li> <!--can add an href here -->
+		{% endfor %}
+		{% endif %}
+	</ul>
+</div>
 
 
 {% endblock %}
