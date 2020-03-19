@@ -89,7 +89,6 @@ class Note(db.Model):
 
 	note_id = db.Column(db.Integer, primary_key=True)
 	user_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))
-	trip_id = db.Column(db.Integer, db.ForeignKey("trips.trip_id"))
 	note = db.Column(db.String(), nullable=True)
 
 	def __repr__(self):

@@ -1,9 +1,9 @@
 from jinja2 import StrictUndefined
 
-from flask import Flask, render_template, request, flash, redirect, session
+from flask import Flask, render_template, request, flash, redirect, session, jsonify
 from datetime import datetime
 import time
-#from flask_debugtoolbar import DebugToolbarExtension
+from flask_debugtoolbar import DebugToolbarExtension
 from model import connect_to_db, db, User, Entry, Trip, Location, Note
 import cloudinary
 import cloudinary.uploader
@@ -283,23 +283,18 @@ def get_entry(entry_id):
 							entry=entry)
 
 @app.route("/add_note/<int:user_id>", methods=["GET", "POST"])
-def add_note():
+def add_note(user_id):
 
 	user_id = session["user_id"]
-	trips= Trip.query.filter_by(user_id=user_id).all()
-	trip_id = trips.trip_id
-
 
 	if request.method == "POST":
 	
 		note = request.form["note"]
 
-		note = Note(user_id=user_id,
-					trip_id=trip_id,
-					note=note)
+		new_note = Note(note=note, user_id=user_id)
 
 
-		db.session.add(note)
+		db.session.add(new_note)
 		db.session.commit()
 
 		return redirect(f"/user_journal/{user_id}")
@@ -307,10 +302,32 @@ def add_note():
 		return redirect(f"/")
 							
 
+# @app.route("/????/<int:note_id>")
+# def get_note(note_id):
+# 	"""Search for entries from a master list.****"""
+
+# 	note_obj = Note.query.get(note_id)
+# 	note = note_obj.note
+	
+# 	if note.user_id != session["user_id"]:
+# 		return jsonify({note})
+
+# 	return jsonify({"no new note"})
+
 # @app.route("/upload") #sandbox
 # def upload_image():
 
-
+# <!-- <div class="container">
+# 	<p>Notes</p>
+# 	{% if notes %}
+# 	<ul>
+# 		{% for note in notes %}
+# 		<li><a href="/????/{{note_id}}">{{note}}</a></li>
+# 		{% endfor %}
+# 	</ul>
+# 	{% endif %}
+# </div>
+#  -->
 
 
 if __name__ == '__main__':
@@ -319,6 +336,6 @@ if __name__ == '__main__':
 
 	connect_to_db(app)
 
-	#DebugToolbarExtension(app)
+	DebugToolbarExtension(app)
 
 	app.run(host='0.0.0.0')
