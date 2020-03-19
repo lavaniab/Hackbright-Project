@@ -84,6 +84,20 @@ class Entry(db.Model):
 
 		return f"<Entry entry_id={self.entry_id}>"
 
+class Note(db.Model):
+	__tablename__="notes"
+
+	note_id = db.Column(db.Integer, primary_key=True)
+	user_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))
+	trip_id = db.Column(db.Integer, db.ForeignKey("trips.trip_id"))
+	note = db.Column(db.String(), nullable=True)
+
+	def __repr__(self):
+
+		return f"<Note note_id={self.note_id}>"
+
+	notes = db.relationship("User", backref="notes")
+
 
 locations_trips = db.Table("locations_trips", 
 

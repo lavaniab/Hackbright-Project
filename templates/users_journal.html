@@ -14,53 +14,33 @@
 	<br>
 </div>
 
-<!-- <button data-tippy-content="Tooltip">Text</button>
-<script>tippy(document.querySelectorAll("button"));</script> -->
-
-<!-- <div class="container">
-	<p>View Trips</p>
-	{% if trips %}
-	<ul>
-		{% for trip in trips %}
-		<li><a href="/trip/{{trip.trip_id}}">{{trip.trip_name}}</a></li>
-		{% endfor %}
-	</ul>
-	{% endif %}
-</div> -->
-
 <div>
 	<br>
 <a href="/select_trip?next_route=add_location" class="btn btn-outline-success" role="button">Add a location to a Trip</a>
 	<br>
 </div>
-<!--  <div class="container">
-	<p>View Locations</p>
-	{% if locations %}
-	<ul>
-		{% for location in locations %}
-		<li><a href="/locations/{{location.location_id}}">{{location.name}}</a></li>
-		{% endfor %}
-	</ul>
-	{% endif %}
-</div> -->
 
 <div>
 	<br>
 <a href="/select_trip?next_route=add_entry" class="btn btn-outline-success" role="button">Add an entry to a Trip</a>
 	<br>
+	<br>
+	<br>
 </div>
 
-
-<!--<div class="container">
-	<p>View Entries</p>
-	{% if entries %}
-	<ul>
-		{% for entry in entries %}
-		<li><a href="/entry/{{entry.entry_id}}">{{entry.title}}</a></li>
-		{% endfor %}
-	</ul>
-	{% endif %}
+<!-- <div>
+	<br>
+	<a href="#" class="btn btn-outline-success" role="button">Future Vacation Ideas</a> <input type="submit" ajax?
+	<label>List of vacation ideas</label>
+	<input type="text" name="description"><br>
 </div> -->
- 
+
+<form  action="/add_note/{{user_id}}"  class="btn btn-outline-success" role="button" method="POST" enctype="multipart/form-data">
+	<h6>Add a note</h6><br>
+	<br>
+	<input type="text" name="title"><br>
+	<input type="submit"><br>
+</form>
+
 
 {% endblock %}

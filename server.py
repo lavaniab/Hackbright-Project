@@ -4,7 +4,7 @@ from flask import Flask, render_template, request, flash, redirect, session
 from datetime import datetime
 import time
 #from flask_debugtoolbar import DebugToolbarExtension
-from model import connect_to_db, db, User, Entry, Trip, Location
+from model import connect_to_db, db, User, Entry, Trip, Location, Note
 import cloudinary
 import cloudinary.uploader
 import cloudinary.api
@@ -91,6 +91,7 @@ def user_journal(user_id):
 	trips = Trip.query.filter_by(user_id=user_id).all()
 	locations = Location.query.filter_by(user_id=user_id).all()
 	entries = Entry.query.filter_by(user_id=user_id).all()
+	notes= Note.query.filter_by(user_id=user_id).all()
 
 	return render_template("users_journal.html",
 						   trips=trips,
@@ -280,6 +281,30 @@ def get_entry(entry_id):
 
 	return render_template("entries.html",
 							entry=entry)
+
+@app.route("/add_note/<int:user_id>", methods=["GET", "POST"])
+def add_note():
+
+	user_id = session["user_id"]
+	trips= Trip.query.filter_by(user_id=user_id).all()
+	trip_id = trips.trip_id
+
+
+	if request.method == "POST":
+	
+		note = request.form["note"]
+
+		note = Note(user_id=user_id,
+					trip_id=trip_id,
+					note=note)
+
+
+		db.session.add(note)
+		db.session.commit()
+
+		return redirect(f"/user_journal/{user_id}")
+	else:
+		return redirect(f"/")
 							
 
 # @app.route("/upload") #sandbox
