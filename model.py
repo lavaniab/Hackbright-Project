@@ -20,7 +20,7 @@ class User(db.Model):
 	fname = db.Column(db.String(25), nullable=False)
 	lname = db.Column(db.String(25), nullable=False)
 	email = db.Column(db.String(64), unique=True)
-	password = db.Column(db.String(64), nullable=False)
+	password = db.Column(db.String(), nullable=False)
 
 	def __repr__(self):
 

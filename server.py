@@ -51,7 +51,9 @@ def registration():
 		passwordConf = request.form['passwordConf']
 		
 		if password == passwordConf:
-			new_user = User(fname=fname, lname=lname, email=email, password=password)
+			new_user = User(fname=fname, lname=lname, email=email)
+			new_user.create_password(password)
+			
 
 		else:
 			del new_user['passwordConf']
