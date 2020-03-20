@@ -3,7 +3,7 @@
 from flask import Flask 
 from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy, Model
-
+from werkzeug.security import generate_password_hash, check_password_hash
 
 #This is the connection to PostgreSQL database from library
 #Find session object within where we do most of our interactions (like committing)
@@ -25,6 +25,13 @@ class User(db.Model):
 	def __repr__(self):
 
 		return f"<User user_id={self.user_id} email={self.email}>"
+
+
+	def create_password(self, password):
+		self.password = generate_password_hash(password)
+
+	def is_valid_password(self, password):
+		check_password_hash(self.password, password)
 
 
 class Trip(db.Model):

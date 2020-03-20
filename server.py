@@ -41,24 +41,48 @@ def registration():
 	"""User registration/create a profile page"""
 
 	if request.method == "POST":
-	# Get form variables
+
 		fname = request.form["fname"]
 		lname = request.form["lname"]
 		email = request.form["email"]
 		password = request.form["password"]
+		passwordConf = request.form['passwordConf']
+		
+		user.create_password(new_user.get('password'))
+
+		if new_user.get('password') != new_user.get('passwordConf'):
+			del user_data['passwordConf']
+
 		new_user = User(fname=fname, lname=lname, email=email, password=password)
 
-
-		db.session.add(new_user)
+		db.session.add(user)
 		db.session.commit()
 
-		user_id = new_user.user_id
 		session["user_id"] = user_id
-	
-		flash("New user profile created!")
-		return redirect(f"/user_journal/{user_id}")
+
+		return redirect(f'/users_journal/{user_id}')
 	else:
-		return redirect(f"/")
+		return redirect("/")
+
+	# if request.method == "POST":
+	# # Get form variables
+	# 	fname = request.form["fname"]
+	# 	lname = request.form["lname"]
+	# 	email = request.form["email"]
+	# 	password = request.form["password"]
+	# 	new_user = User(fname=fname, lname=lname, email=email, password=password)
+
+
+	# 	db.session.add(new_user)
+	# 	db.session.commit()
+
+	# 	user_id = new_user.user_id
+	# 	session["user_id"] = user_id
+	
+	# 	flash("New user profile created!")
+	# 	return redirect(f"/user_journal/{user_id}")
+	# else:
+	# 	return redirect(f"/")
 
 
 @app.route("/api/auth", methods=["POST"])
@@ -285,6 +309,8 @@ def get_entry(entry_id):
 
 @app.route("/add_note", methods=["GET", "POST"])
 def add_note():
+	"""User can add short notes to their homepage."""
+
 
 	user_id = session["user_id"]
 
@@ -299,22 +325,21 @@ def add_note():
 		db.session.commit()
 
 		return jsonify({"note_id": new_note.note_id, "note": new_note.note})
-		# return redirect(f"/user_journal/{user_id}")
 	else:
 		return redirect(f"/")
 							
 
-@app.route("/????/<int:note_id>")
-def get_note(note_id):
-	"""Search for entries from a master list.****"""
+# @app.route("/????/<int:note_id>")
+# def get_note(note_id):
+# 	"""If I want to make notes links"""
 
-	note_obj = Note.query.get(note_id)
-	note = note_obj.note
+# 	note_obj = Note.query.get(note_id)
+# 	note = note_obj.note
 	
-	if note.user_id != session["user_id"]:
-		return jsonify({note})
+# 	if note.user_id != session["user_id"]:
+# 		return jsonify({note})
 
-	return jsonify({"no new note"})
+# 	return jsonify({"no new note"})
 
 
 # @app.route("/upload") #sandbox
