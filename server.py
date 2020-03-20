@@ -40,6 +40,8 @@ def homepage():
 def registration():
 	"""User registration/create a profile page"""
 
+	
+
 	if request.method == "POST":
 
 		fname = request.form["fname"]
@@ -48,41 +50,22 @@ def registration():
 		password = request.form["password"]
 		passwordConf = request.form['passwordConf']
 		
-		user.create_password(new_user.get('password'))
+		if password == passwordConf:
+			new_user = User(fname=fname, lname=lname, email=email, password=password)
 
-		if new_user.get('password') != new_user.get('passwordConf'):
-			del user_data['passwordConf']
+		else:
+			del new_user['passwordConf']
 
-		new_user = User(fname=fname, lname=lname, email=email, password=password)
-
-		db.session.add(user)
+		
+		db.session.add(new_user)
 		db.session.commit()
 
+		user_id = new_user.user_id
 		session["user_id"] = user_id
 
-		return redirect(f'/users_journal/{user_id}')
+		return redirect(f"/user_journal/{user_id}")
 	else:
 		return redirect("/")
-
-	# if request.method == "POST":
-	# # Get form variables
-	# 	fname = request.form["fname"]
-	# 	lname = request.form["lname"]
-	# 	email = request.form["email"]
-	# 	password = request.form["password"]
-	# 	new_user = User(fname=fname, lname=lname, email=email, password=password)
-
-
-	# 	db.session.add(new_user)
-	# 	db.session.commit()
-
-	# 	user_id = new_user.user_id
-	# 	session["user_id"] = user_id
-	
-	# 	flash("New user profile created!")
-	# 	return redirect(f"/user_journal/{user_id}")
-	# else:
-	# 	return redirect(f"/")
 
 
 @app.route("/api/auth", methods=["POST"])
