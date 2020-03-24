@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}Locations Page{% endblock %}
+
+
+{% block body %}
+
+
+<h3>{{ location.name }}</h3>
+
+<div class="container">
+	<p>View Trips</p>
+	{% if location.trips %}
+		<ul>
+			{% for trip in location.trips %}
+			<li><a href="/trip/{{trip.trip_id}}">{{trip.trip_name}}</a></li>
+			{% endfor %}
+		</ul>
+	{% endif %}
+</div>
+
+{% endblock %}

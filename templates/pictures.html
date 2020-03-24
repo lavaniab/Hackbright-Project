@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+
+{% block body %}
+
+<h3>All your pictures!</h3>
+
+{% if pictures: %}
+{% for picture in pictures: %}
+<img src="{{ picture }}" alt="No pictures yet!"/>
+<p>{{picture}}</p>
+<br/>
+{% endfor %}
+{% endif %}
+
+{% endblock %}

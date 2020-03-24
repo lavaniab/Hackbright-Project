@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block title %}Trips Page{% endblock %}
+
+
+{% block body %}
+
+
+	<h3>{{ name }}</h3>
+	<p>{{ description }}</p>
+
+<div class="container">
+	<p>View Locations</p>
+	{% if trip.locations %}
+		<ul>
+			{% for location in trip.locations %}
+			<li><a href="/locations/{{location.location_id}}">{{location.name}}</a></li>
+			{% endfor %}
+		</ul>
+	{% endif %}
+</div>
+
+<div class="container">
+	<p>View Entries</p>
+	{% if trip.entries %}
+	<ul>
+		{% for entry in trip.entries %}
+		<li><a href="/entry/{{entry.entry_id}}">{{entry.title}}</a></li>
+		{% endfor %}
+	</ul>
+	{% endif %}
+</div>
+
+{% endblock %}

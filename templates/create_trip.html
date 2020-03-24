@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}Trip Creation{% endblock %}
+
+
+{% block body %}
+
+
+<form  action="/create_trip" method="POST">
+	<h3>Create Trip</h3><br>
+	<br>
+	<label>Trip Name</label>
+	<input type="text" name="trip_name"><br>
+	<label>Description</label>
+	<input type="text" name="description"><br>
+	<br>
+	<input type="submit">
+</form>
+
+
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}Select a Trip{% endblock %}
+
+{% block body %}
+
+
+<div class="container">
+	<br>
+	<br>
+	<p> Select a trip</p>
+	<ul>
+		{% if trips %}
+			{% for trip in trips %}
+			<br>
+		<li><a href="/{{next_route}}/{{trip.trip_id}}" class="btn btn-outline-primary" role="button">{{trip.trip_name}}</a></li>
+		<br>
+			{% endfor %}
+		{% endif %}
+	</ul>
+</div>
+
+{% endblock %}

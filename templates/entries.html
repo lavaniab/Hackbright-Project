@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}Entry's Page{% endblock %}
+
+
+{% block body %}
+
+
+<h3>{{ entry.title }}</h3>
+
+<h6> {{ entry.time_stamp }}</h6>
+
+<img src="{{ entry.user_picture }}">
+
+<div class="container">
+	<p>View Selected Entry</p>
+	{% if entry.entry %}
+		<ul>
+			<li>{{ entry.entry }}</li>
+		</ul>
+	{% endif %}
+
+</div>
+
+{% endblock %}
