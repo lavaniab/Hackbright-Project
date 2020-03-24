@@ -1,18 +1,5 @@
 "use strict";
 
-// tippy('#myButton', {
-//   content: 'Tooltip'
-// });
-
-// tippy(document.querySelectorAll("button"));
-// tippy('[data-tippy-content]');
-
-//cut losses with tippy
-
-
-//should probably have similar for trip and location
-
-
 
 $(document).ready(function() {
 	const whereTheNotesGo = $('#allTheNotes');

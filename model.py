@@ -29,10 +29,10 @@ class User(db.Model):
 
 	def create_password(self, password):
 		self.password = generate_password_hash(password)
-
+			#password_hash
 	def is_valid_password(self, password):
-		check_password_hash(self.password, password)
-
+		return check_password_hash(self.password, password)
+										#password_hash
 
 class Trip(db.Model):
 	"""Trip the user entered into journal."""

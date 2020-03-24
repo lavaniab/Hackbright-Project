@@ -40,8 +40,6 @@ def homepage():
 def registration():
 	"""User registration/create a profile page"""
 
-	
-
 	if request.method == "POST":
 
 		fname = request.form["fname"]
@@ -53,12 +51,9 @@ def registration():
 		if password == passwordConf:
 			new_user = User(fname=fname, lname=lname, email=email)
 			new_user.create_password(password)
-			
-
 		else:
 			del new_user['passwordConf']
 
-		
 		db.session.add(new_user)
 		db.session.commit()
 
@@ -76,12 +71,12 @@ def login_process():
 		
 	user = User.query.filter_by(email=request.form.get('email')).first()
 	user_id = user.user_id
-	if user.password == (request.form.get('password')):
+	
+	if user.is_valid_password(request.form.get('password')):
+	#if user.password == (request.form.get('password')):
 		session['user_id'] = user.user_id
-		flash('Login success!', 'success')
 		return redirect(f"/user_journal/{user_id}")
 	else:
-		flash('Invalid password. Try again.', 'danger')
 		return redirect("/")
 
 
