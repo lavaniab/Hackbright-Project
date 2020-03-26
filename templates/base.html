@@ -43,18 +43,6 @@
 
 
 
-
-<div>
-{% with messages = get_flashed_messages() %}
-	{% if message in messages %}
-		{% for message in messages %}
-			<h4>{{ message }}</h4>
-		{% endfor %}
-	{% endif %}
-{% endwith %}
-</div>
-
-
 {% endblock %}
 
 

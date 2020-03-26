@@ -73,7 +73,6 @@ def login_process():
 	user_id = user.user_id
 	
 	if user.is_valid_password(request.form.get('password')):
-	#if user.password == (request.form.get('password')):
 		session['user_id'] = user.user_id
 		return redirect(f"/user_journal/{user_id}")
 	else:
@@ -85,7 +84,6 @@ def logout():
 	"""User logout."""
 
 	del session["user_id"]
-	flash("Logged out.")
 	return redirect(f"/")
 
 @app.route("/user_journal/<int:user_id>")
@@ -114,12 +112,14 @@ def create_trip():
 		user_id = session["user_id"]
 		trip_name = request.form["trip_name"]
 		description = request.form["description"]
-		trip = Trip(trip_name=trip_name, description=description, user_id=user_id)
+		trip = Trip(trip_name=trip_name,
+					description=description,
+					user_id=user_id)
 
 		db.session.add(trip)
 		db.session.commit()
+
 		trip_id = trip.trip_id
-		flash("Your trip has been added!")
 
 		return redirect(f"/user_journal/{user_id}") 
 
@@ -135,7 +135,7 @@ def create_trip():
 
 @app.route("/trip/<int:trip_id>")
 def get_trip(trip_id):
-	"""Search for a trip from a master list.****"""
+	"""Search for a trip from a master list."""
 	
 	
 	trip = Trip.query.get(trip_id)
@@ -166,7 +166,8 @@ def pictures():
 	trips = Trip.query.filter_by(user_id=user_id).all()
 	entries = Entry.query.filter_by(user_id=user_id).all()
 	pictures = map(lambda entry: entry.user_picture, entries) 
-	
+	#explain this again map:take a list, apply a fn to list
+	#return a new list with result of fn call
 	if user_id:
 
 		return render_template("pictures.html",
@@ -217,7 +218,6 @@ def add_location(trip_id):
 
 		location_id = location.location_id
 
-		flash("Your location has been added!")
 		return redirect(f"/user_journal/{user_id}")
 
 	else:
@@ -227,7 +227,7 @@ def add_location(trip_id):
 
 @app.route("/locations/<int:location_id>")
 def get_location(location_id):
-	"""Search for a location from a master list****."""
+	"""Search for a location from a trip."""
 
 	location = Location.query.get(location_id) 
 
@@ -248,14 +248,14 @@ def add_entry(trip_id):
 	if request.method == "POST":
 		title = request.form["title"]
 		text = request.form["entry"]
-		upload = request.files["file"]
-
 		all_numbers = datetime.now().timestamp()
 		time_stamp = time.ctime(all_numbers)
+		image_url = None
 
-		uploaded_file_info = cloudinary.uploader.upload(upload)
-		image_url = uploaded_file_info['secure_url']
-
+		if request.files:
+			upload = request.files["file"]
+			uploaded_file_info = cloudinary.uploader.upload(upload)
+			image_url = uploaded_file_info['secure_url']
 
 		entry = Entry(title=title,
 					entry=text,
@@ -267,7 +267,6 @@ def add_entry(trip_id):
 		db.session.add(entry)
 		db.session.commit()
 
-		flash("Your entry has been added!")
 		return redirect(f"/user_journal/{user_id}")	
 
 	else:
@@ -277,7 +276,7 @@ def add_entry(trip_id):
 
 @app.route("/entry/<int:entry_id>")
 def get_entry(entry_id):
-	"""Search for entries from a master list.****"""
+	"""Search for entries in a trip."""
 
 	entry = Entry.query.get(entry_id)
 	
@@ -287,10 +286,10 @@ def get_entry(entry_id):
 	return render_template("entries.html",
 							entry=entry)
 
+
 @app.route("/add_note", methods=["GET", "POST"])
 def add_note():
 	"""User can add short notes to their homepage."""
-
 
 	user_id = session["user_id"]
 
@@ -309,7 +308,7 @@ def add_note():
 		return redirect(f"/")
 							
 
-# @app.route("/????/<int:note_id>")
+# @app.route("/notes/<int:note_id>")
 # def get_note(note_id):
 # 	"""If I want to make notes links"""
 
@@ -336,8 +335,7 @@ def add_header(r):
     r.headers["Expires"] = "0"
     r.headers['Cache-Control'] = 'public, max-age=0'
     return r
-
-
+#so js expires, control static cache--important for dev of js
 
 if __name__ == '__main__':
 

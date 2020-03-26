@@ -16,19 +16,11 @@ $(document).ready(function() {
 
 		myRequest.then(function(response) {
 			const htmlToAdd = `<li>${response.note}</li>` //can add href here
-			// console.log(htmlToAdd);                      template literal
+                      									//template literal
 			whereTheNotesGo.append(htmlToAdd);
 		})
-		// console.log(formData);
+
 	});
 });
 
-// function createEntry(results) {
-//     $("#id").html(results);
-// }
-
-// function showEntry(evt) {
-//     $.get('/add_entry/<int:trip_id>', createEntry);
-// }
-
-// $('#id-button').on('click', showEntry);
+//
