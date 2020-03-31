@@ -20,8 +20,8 @@
 }
 
 /* Code copy and pasted from https://mdbootstrap.com/docs/jquery/css/background-image/ */
-html,
-body,
+/*html,
+body,*/
 header,
 .view {
   height: 100%;
@@ -40,6 +40,9 @@ header,
   background-color: #78909c !important;
 }
 
+.testing {
+	color: #b52323;
+}
 .navbar:not(.top-nav-collapse) {
   background: transparent !important;
 }
@@ -63,13 +66,15 @@ h5 {
   width: 80px;
 }
 
-/*body,
+body,
 html {
   height: 100%;
-}*/
+}
+
+body,
 .bg {
   /* The image used */
-  background-image: ;
+  background-image: url(../images/globe_map_travel.jpg);
 
   /* Full height */
   height: 100%;
