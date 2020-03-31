@@ -306,35 +306,22 @@ def add_note():
 		return jsonify({"note_id": new_note.note_id, "note": new_note.note})
 	else:
 		return redirect(f"/")
-							
-
-# @app.route("/notes/<int:note_id>")
-# def get_note(note_id):
-# 	"""If I want to make notes links"""
-
-# 	note_obj = Note.query.get(note_id)
-# 	note = note_obj.note
-	
-# 	if note.user_id != session["user_id"]:
-# 		return jsonify({note})
-
-# 	return jsonify({"no new note"})
 
 
 # @app.route("/upload") #sandbox
 # def upload_image():
 
-@app.after_request
-def add_header(r):
-    """
-    Add headers to both force latest IE rendering engine or Chrome Frame,
-    and also to cache the rendered page for 10 minutes.
-    """
-    r.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
-    r.headers["Pragma"] = "no-cache"
-    r.headers["Expires"] = "0"
-    r.headers['Cache-Control'] = 'public, max-age=0'
-    return r
+# @app.after_request
+# def add_header(r):
+#     """
+#     Add headers to both force latest IE rendering engine or Chrome Frame,
+#     and also to cache the rendered page for 10 minutes.
+#     """
+#     r.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+#     r.headers["Pragma"] = "no-cache"
+#     r.headers["Expires"] = "0"
+#     r.headers['Cache-Control'] = 'public, max-age=0'
+#     return r
 #so js expires, control static cache--important for dev of js
 
 if __name__ == '__main__':

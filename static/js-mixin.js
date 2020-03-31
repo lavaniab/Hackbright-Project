@@ -23,4 +23,6 @@ $(document).ready(function() {
 	});
 });
 
-//
+// code taken from https://mdbootstrap.com/docs/jquery/css/background-image/
+// Animations init
+new WOW().init();

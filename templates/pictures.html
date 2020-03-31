@@ -5,12 +5,29 @@
 
 <h3>All your pictures!</h3>
 
-{% if pictures: %}
+<!-- {% if pictures: %}
 {% for picture in pictures: %}
-<img src="{{ picture }}" alt="No pictures yet!"/>
-<p>{{picture}}</p>
+<div class="img">
+<img src="{{ picture }}">
+</div>
+if no pic, weird no pic image showing up
+<p>{{picture}}</p> keep commented out/url
 <br/>
 {% endfor %}
-{% endif %}
+{% endif %} -->
+
+<div class="container">
+  <div class="row justify-content-start">
+  	{% if pictures: %}
+	{% for picture in pictures: %}
+    <div class="col-4">
+    	<img src="{{ picture }}">
+	</div>
+	{% endfor %}
+	{% endif %}
+  </div>
+</div>
+   
+
 
 {% endblock %}

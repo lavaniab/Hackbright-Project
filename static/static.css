@@ -10,3 +10,72 @@
     color: blue;
 }
     
+
+.col-4 {
+    float:  left;
+    width:  100px;
+    height: 100px;
+    background-size: cover;
+    display: inline-block;
+}
+
+/* Code copy and pasted from https://mdbootstrap.com/docs/jquery/css/background-image/ */
+html,
+body,
+header,
+.view {
+  height: 100%;
+}
+
+@media (max-width: 740px) {
+  html,
+  body,
+  header,
+  .view {
+    height: 100vh;
+  }
+}
+
+.top-nav-collapse {
+  background-color: #78909c !important;
+}
+
+.navbar:not(.top-nav-collapse) {
+  background: transparent !important;
+}
+
+@media (max-width: 991px) {
+  .navbar:not(.top-nav-collapse) {
+    background: #78909c !important;
+  }
+}
+
+h1 {
+  letter-spacing: 8px;
+}
+
+h5 {
+  letter-spacing: 3px;
+}
+
+.hr-light {
+  border-top: 3px solid #fff;
+  width: 80px;
+}
+
+/*body,
+html {
+  height: 100%;
+}*/
+.bg {
+  /* The image used */
+  background-image: ;
+
+  /* Full height */
+  height: 100%;
+
+  /* Center and scale the image nicely */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
