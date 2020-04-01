@@ -8,8 +8,8 @@
 	</title>
 
 <!-- Bootstrap link -->
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-<link rel="stylesheet" src="/static/static.css"> 
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"/>
+<link rel="stylesheet" href="/static/static.css"/> 
 
 </head> 
 
@@ -39,101 +39,39 @@
 
 <!-- below code taken from https://mdbootstrap.com/docs/jquery/css/background-image/ -->
 
-<html lang="en">
-    <body>
-
         <header>
           <!--Navbar-->
-          <nav class="navbar navbar-expand-lg navbar-dark fixed-top"> <!-- scrolling-navbar"> -->
-            <div class="container">
-              <a class="navbar-brand testing" href="/"><strong>Welcome Page</strong></a>
-              <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent-7" aria-controls="navbarSupportedContent-7" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-              </button>
+          <nav> <!-- class="navbar navbar-expand-lg navbar-dark" --> <!-- scrolling-navbar"> -->
+            <div>
+              <a href="/"><strong>Welcome Page</strong></a>
              {% if 'user_id' in session %}
-              <div class="collapse navbar-collapse" id="navbarSupportedContent-7">
-                <ul class="navbar-nav mr-auto">
-                  <li class="nav-item active">
-                    <a class="nav-link" href="/user_journal/{{session['user_id']}}">Private Journal <span class="sr-only">(current)</span></a>
+              <div>
+                <ul class="header-ul">
+                  <li>
+                    <a href="/user_journal/{{session['user_id']}}">Private Journal</a>
                   </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="/select_trip?next_route=trip">Trips</a>
+                  <li>
+                    <a href="/select_trip?next_route=trip">Trips</a>
                   </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="/pictures">Pictures</a>
+                  <li>
+                    <a href="/pictures">Pictures</a>
                   </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="/logout">Logout</a>
+                  <li>
+                    <a href="/logout">Logout</a>
                   </li>
               {% endif %}
                 </ul>
-       <!--        <form class="form-inline">
-                  <div class="md-form my-0">
-                    <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
-                  </div>
-                </form>-->
               </div>
             </div>
           </nav>
-          <br>
-          <br>
-          <!-- Navbar -->
-          <!-- Full Page Intro -->
-          <div class="view" style="background-image: url('https://mdbootstrap.com/img/Photos/Others/img%20%2848%29.jpg'); background-repeat: no-repeat; background-size: cover; background-position: center center;">
-            <!-- Mask & flexbox options-->
-            <div class="mask rgba-black-light align-items-center">
-              <!-- Content -->
-              <div class="container">
-
-                <!--Grid row-->
-                <div class="row">
-                  <!--Grid column-->
-                  <div class="col-md-12 mb-4 white-text text-center">
-                    <br>
-                    <br>
-                    <h1 class="h1-reponsive white-text text-uppercase font-weight-bold mb-0 pt-md-5 pt-5 wow fadeInDown" data-wow-delay="0.3s"><strong>Private Travel Journal</strong></h1>
-                    <hr class="hr-light my-4 wow fadeInDown" data-wow-delay="0.4s">
-                    <h5 class="text-uppercase mb-4 white-text wow fadeInDown" data-wow-delay="0.4s"><strong>Adventure Awaits</strong></h5>
-                    <!-- <a class="btn btn-outline-white wow fadeInDown" data-wow-delay="0.4s">Login</a>
-                    <a class="btn btn-outline-white wow fadeInDown" data-wow-delay="0.4s">Create Account</a> -->
-                  </div>
-                  <!--Grid column-->
-                </div>
-                <!--Grid row-->
-              </div>
-              <!-- Content -->
-            </div>
-            <!-- Mask & flexbox options-->
+          <div class="banner-text">
+            <h1><strong>Private Travel Journal</strong></h1>
+            <h5><strong>Adventure Awaits</strong></h5>
           </div>
-          <!-- Full Page Intro -->
         </header>
         <!-- Main navigation -->
         <!--Main Layout-->
         <main>
-           <div class="bg"> <!-- background image--css -->
-          <div class="container">
-            <!--Grid row-->
-            <div class="row py-5">
-              <!--Grid column-->
-              <div class="col-md-12 text-center">
-                <p>Welcome to your new private journal log! This site is designed to allow you to journal electronically, with your privacy in mind. Here, you may create trips, add locations and entries to trips, as well as save pictures when creating an entry.</p>
-               
-              </div>
-              <!--Grid column-->
-            </div>
-            <!--Grid row-->
-          </div>
-        </main>
-        <!--Main Layout-->
-<!--     <p class="py-5 text-center">This example creates a full page background image. Try to resize the browser window to see how it always will cover the full screen (when scrolled to top), and that it scales nicely on all screen sizes.</p> -->
-      </body>
-         <div class="bg"><!--  style=" background-image: url('/static/images/globe_map_travel.jpg');" -->
-<!--       <img src="/static/images/camera-wood-background.jpg"/>
- -->    </div>
-      </html>
-    </body>
-    </html>
-
 
 {% block body %}
 
