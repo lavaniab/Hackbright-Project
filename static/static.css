@@ -29,7 +29,7 @@ header,
 
 @media (max-width: 740px) {
   html,
-  body,
+  /*body,*/
   header,
   .view {
     height: 100vh;
@@ -66,15 +66,14 @@ h5 {
   width: 80px;
 }
 
-body,
+/*body,
 html {
   height: 100%;
-}
+}*/
 
-body,
 .bg {
   /* The image used */
-  background-image: url(../images/globe_map_travel.jpg);
+  background-image: url(/static/images/globe_map_travel.jpg);
 
   /* Full height */
   height: 100%;
@@ -83,4 +82,8 @@ body,
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
+}
+
+.nav-item {
+	color: pink;
 }
