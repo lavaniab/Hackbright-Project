@@ -14,6 +14,7 @@
 </head> 
 
 <body>
+  <div id="bg">&nbsp;</div>
 
 <!-- <header>
   <div class="navbar navbar-expand-md navbar-dark bg-dark">
@@ -36,42 +37,36 @@
   </div>
 </header> -->
 
-
-<!-- below code taken from https://mdbootstrap.com/docs/jquery/css/background-image/ -->
-
-        <header>
-          <!--Navbar-->
-          <nav> <!-- class="navbar navbar-expand-lg navbar-dark" --> <!-- scrolling-navbar"> -->
-            <div>
-              <a href="/"><strong>Welcome Page</strong></a>
-             {% if 'user_id' in session %}
-              <div>
-                <ul class="header-ul">
-                  <li>
-                    <a href="/user_journal/{{session['user_id']}}">Private Journal</a>
-                  </li>
-                  <li>
-                    <a href="/select_trip?next_route=trip">Trips</a>
-                  </li>
-                  <li>
-                    <a href="/pictures">Pictures</a>
-                  </li>
-                  <li>
-                    <a href="/logout">Logout</a>
-                  </li>
-              {% endif %}
-                </ul>
-              </div>
-            </div>
-          </nav>
-          <div class="banner-text">
-            <h1><strong>Private Travel Journal</strong></h1>
-            <h5><strong>Adventure Awaits</strong></h5>
+    <header>
+      <!--Navbar-->
+      <nav> <!-- class="navbar navbar-expand-lg navbar-dark" --> <!-- scrolling-navbar"> -->
+        <div>
+          <a href="/"><strong>Welcome Page</strong></a>
+         {% if 'user_id' in session %}
+          <div>
+            <ul class="header-ul">
+              <li>
+                <a href="/user_journal/{{session['user_id']}}">Private Journal</a>
+              </li>
+              <li>
+                <a href="/select_trip?next_route=trip">Trips</a>
+              </li>
+              <li>
+                <a href="/pictures">Pictures</a>
+              </li>
+              <li>
+                <a href="/logout">Logout</a>
+              </li>
+          {% endif %}
+            </ul>
           </div>
-        </header>
-        <!-- Main navigation -->
-        <!--Main Layout-->
-        <main>
+        </div>
+      </nav>
+      <div class="banner-text">
+        <h1><strong>Private Travel Journal</strong></h1>
+        <h5 class="banner-small"><strong>Adventure Awaits</strong></h5>
+      </div>
+    </header>
 
 {% block body %}
 

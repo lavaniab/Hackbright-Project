@@ -14,7 +14,8 @@
 	{% if trip.locations %}
 		<ul>
 			{% for location in trip.locations %}
-			<li><a href="/locations/{{location.location_id}}">{{location.name}}</a></li>
+			<li><a href="/locations/{{location.location_id}}" type="button" class="btn btn-dark">{{location.name}}</a></li>
+			<br>
 			{% endfor %}
 		</ul>
 	{% endif %}
@@ -24,9 +25,12 @@
 	<!--<p>View Entries</p>-->
 	{% if trip.entries %}
 	<ul>
+		<br>
 		{% for entry in trip.entries %}
-		<li><a href="/entry/{{entry.entry_id}}">{{entry.title}}</a></li>
+		<li><a href="/entry/{{entry.entry_id}}" type="button" class="btn btn-dark">{{entry.title}}</a></li>
+		<br>
 		{% endfor %}
+		<br>
 	</ul>
 	{% endif %}
 </div>

@@ -4,16 +4,22 @@
 
 {% block body %}
 
-
+<br>
+<br>
+<br>
+<br>
 <div class="container">
 	<br>
 	<br>
 	<!--<p> Select a trip</p>-->
 	<ul>
 		{% if trips %}
+		<br>
 			{% for trip in trips %}
 			<br>
-		<li><a href="/{{next_route}}/{{trip.trip_id}}" class="btn btn-outline-primary" role="button">{{trip.trip_name}}</a></li>
+			<br>
+		<li><a href="/{{next_route}}/{{trip.trip_id}}" type="button" class="btn btn-dark">{{trip.trip_name}}</a></li>
+		<br>
 		<br>
 			{% endfor %}
 		{% endif %}
