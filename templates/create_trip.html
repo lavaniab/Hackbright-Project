@@ -5,17 +5,21 @@
 
 {% block body %}
 
-
-<form  action="/create_trip" method="POST">
-	<h3>Create Trip</h3><br>
-	<br>
-	<label>Trip Name</label>
-	<input type="text" name="trip_name"><br>
-	<label>Description</label>
-	<input type="text" name="description"><br>
-	<br>
-	<input type="submit">
-</form>
-
+<div id="forms-center">
+	<form  action="/create_trip" method="POST">
+		<h3>Create Trip</h3><br>
+		<br>
+		<div class="form-group row">
+			<label class="col-sm-2 col-form-label">Trip Name</label>
+			<input type="text" name="trip_name"><br>
+		</div>
+		<div class="form-group row">
+			<label class="col-sm-2 col-form-label">Description</label>
+			<input id="large-box" type="text" name="description"><br>
+		</div>
+		<br>
+		<input type="submit" class="btn btn-dark">
+	</form>
+</div>
 
 {% endblock %}
