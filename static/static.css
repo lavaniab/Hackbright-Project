@@ -106,7 +106,12 @@ label {
 #forms-center {
 	align-items: center;
 }
+.col-4 img {
+	width: 95%;
+	margin-bottom: 2em;
+}
 
+/*
 .container {
 	text-align: center;
   height: 200px;
@@ -118,4 +123,4 @@ label {
 	font-weight: bolder;    
 	text-shadow: 1px 0 #888888;
 	letter-spacing:1px;
-}
+}*/
