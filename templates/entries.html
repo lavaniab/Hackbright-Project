@@ -7,17 +7,21 @@
 
 
 <h3>{{ entry.title }}</h3>
+<br>
 
 <h6> {{ entry.time_stamp }}</h6>
+<br>
 
 <img src="{{ entry.user_picture }}">
+<br>
+<br>
 
-<div class="container">
+<div class="single-entry-page">
 	<!--<p>View Selected Entry</p>-->
 	{% if entry.entry %}
-<!-- 		<ul> -->
-			<li>{{ entry.entry }}</li>
-		<!-- </ul> -->
+
+		{{ entry.entry }}
+		
 	{% endif %}
 
 </div>

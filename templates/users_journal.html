@@ -4,19 +4,22 @@
 
 
 {% block body %}
-
-<h5>Welcome to your journal.</h5>
+<br>
+<br>
+<h3>Welcome to your journal.</h3>
 
 <div id="round-buttons">
 <div>
 	<br>
 	<a href="/create_trip" type="button" class="btn btn-dark">Create a Trip</a> <!-- class="btn btn-outline-success" -->
 	<br>
+	<br>
 </div>
-
+</div>
 <div>
 	<br>
 <a href="/select_trip?next_route=add_location" type="button" class="btn btn-dark">Add a location to a Trip</a>
+	<br>
 	<br>
 </div>
 <!--The ? in a url breaks up request parameters -->
@@ -28,14 +31,16 @@
 </div>
 </div>
 
-<form id="addNoteForm" action="/add_note"  type="button" class="btn btn-dark" method="POST" enctype="multipart/form-data">
-	<h6>Add a note</h6><br>
+<div>
+<form id="addNoteForm" action="/add_note" method="POST" enctype="multipart/form-data">
+	<h3>Add a note</h3>
+	<input type="text" name="note" id="note" placeholder="Not all who wander...">
 	<br>
-	<input type="text" name="note" id="note"><br>
-	<input type="submit" class="btn btn-outline-success"><br>
-</form>
-
-<div class="container">
+	<br>
+	<input type="submit" class="btn btn-dark">
+</form>   
+</div>
+<div class="notes-section">
 	<p>Notes</p>
 	<ul id="allTheNotes">
 		{% if notes %}
@@ -44,6 +49,7 @@
 		{% endfor %}
 		{% endif %}
 	</ul>
+</div>
 </div>
 
 

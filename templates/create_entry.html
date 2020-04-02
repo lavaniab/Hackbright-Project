@@ -5,17 +5,23 @@
 {% block body %}
 
 
-
-<form  action="/add_entry/{{trip_id}}" method="POST" enctype="multipart/form-data">
-	<h3>Create Entry</h3><br>
-	<br>
-	<label>Title</label>
-	<input type="text" name="title"><br>
-	<label>Entry</label>
-	<input type="text" name="entry"><br>
-	<input type="submit"><br>
-	<label>Picture</label>
-	<input type="file" name="file">
-</form>
-
+<div id="forms-center">
+	<form  action="/add_entry/{{trip_id}}" method="POST" enctype="multipart/form-data">
+		<h3>Create Entry</h3><br>
+		<br>
+		<div class="form-group row">
+			<label class="col-sm-2 col-form-label">Title</label>
+			<input type="text" name="title" placeholder="Day 1: Entry 1...">
+		</div>
+		<div class="form-group row">
+			<label class="col-sm-2 col-form-label">Entry</label>
+			<input type="text" id="large-box" name="entry" placeholder="The adventure has begun...">
+		</div>
+		<div class="form-group row">
+			<label class="col-sm-2 col-form-label">Picture</label>
+			<input type="file" name="file" class="btn btn-outline-secondary" >
+		</div>
+		<input type="submit" class="btn btn-dark">
+	</form>
+</div>
 {% endblock %}

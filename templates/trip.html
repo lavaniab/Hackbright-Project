@@ -8,19 +8,26 @@
 <br>
 <br>
 <br>
+<div>
 	<h3>{{ name }}</h3>
+	<br>
 	<h5>{{ description }}</h5>
-
+	<br>
+</div>
+<br>
+<br>
 <div class="container">
 	<!--<p>View Locations</p>-->
 	{% if trip.locations %}
 		
 		{% for location in trip.locations %}
-		<a href="/locations/{{location.location_id}}" type="button" class="btn btn-dark">{{location.name}}</a>
+		<a href="/locations/{{location.location_id}}" type="button" class="btn btn-secondary">{{location.name}}</a>
 		<br>
 		{% endfor %}
 	
 	{% endif %}
+	<br>
+	<br>
 </div>
 
 <div class="container">
