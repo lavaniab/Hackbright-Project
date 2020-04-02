@@ -4,12 +4,12 @@
 
 
 {% block body %}
-<br>
-<br>
-<h3>Welcome to your journal.</h3>
+<h3>Space for thought; room for growth.</h3>
 
 <div id="round-buttons">
 <div>
+	<br>
+	<br>
 	<br>
 	<a href="/create_trip" type="button" class="btn btn-dark">Create a Trip</a> <!-- class="btn btn-outline-success" -->
 	<br>
@@ -29,18 +29,18 @@
 	<br>
 	<br>
 </div>
-</div>
+	<div>
+		<form id="addNoteForm" action="/add_note" method="POST" enctype="multipart/form-data">
+			<h3>Add a note</h3>
+			<input type="text" name="note" id="note" placeholder="Not all who wander...">
+			<br>
+			<br>
+			<input type="submit" class="btn btn-dark">
+		</form>   
+	</div>
 
-<div>
-<form id="addNoteForm" action="/add_note" method="POST" enctype="multipart/form-data">
-	<h3>Add a note</h3>
-	<input type="text" name="note" id="note" placeholder="Not all who wander...">
-	<br>
-	<br>
-	<input type="submit" class="btn btn-dark">
-</form>   
-</div>
 <div class="notes-section">
+	<br>
 	<p>Notes</p>
 	<ul id="allTheNotes">
 		{% if notes %}
