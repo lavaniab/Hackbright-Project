@@ -6,7 +6,7 @@
 {% block body %}
 <h3>Space for thought; room for growth.</h3>
 
-<div id="round-buttons">
+<div> <!-- id="round-buttons"> -->
 <div>
 	<br>
 	<br>
@@ -44,10 +44,12 @@
 	<p>Notes</p>
 	<ul id="allTheNotes">
 		{% if notes %}
-		{% for note in notes %}
-		<li>{{note.note}}</li> <!--can add an href here -->
-		{% endfor %}
-		{% endif %}
+		<div>
+			{% for note in notes %}
+			<li>{{note.note}}</li> <!--can add an href here
+			{% endfor %}
+		</div>
+		{% endif %} -->
 	</ul>
 </div>
 </div>
