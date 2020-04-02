@@ -39,21 +39,17 @@
 		</form>   
 	</div>
 
-<div class="notes-section">
+	<div class="notes-section">
 	<br>
-	<p>Notes</p>
-	<ul id="allTheNotes">
-		{% if notes %}
-		<div>
-			{% for note in notes %}
-			<li>{{note.note}}</li> <!--can add an href here
-			{% endfor %}
+		<p>Notes</p>
+		<div id="allTheNotes">
+			{% if notes %}
+				{% for note in notes %}
+				<p>{{note.note}}</p> <!--can add an href here-->
+				{% endfor %}
+			{% endif %}
 		</div>
-		{% endif %} -->
-	</ul>
-</div>
-</div>
-
+	</div>
 
 {% endblock %}
 
