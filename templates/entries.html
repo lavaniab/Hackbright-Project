@@ -5,25 +5,27 @@
 
 {% block body %}
 
+<div>
+	<h3>{{ entry.title }}</h3>
+	<br>
 
-<h3>{{ entry.title }}</h3>
-<br>
-
-<h6> {{ entry.time_stamp }}</h6>
-<br>
-
-<img src="{{ entry.user_picture }}">
-<br>
-<br>
-
-<div class="single-entry-page">
-	<!--<p>View Selected Entry</p>-->
-	{% if entry.entry %}
-
-		{{ entry.entry }}
-		
-	{% endif %}
-
+	<h5> {{ entry.time_stamp }}</h5>
+	<br>
+</div>
+<div class="container">
+	<div class="row">
+	<div class="col-5">
+		<img src="{{ entry.user_picture }}">
+		<br>
+		<br>
+	</div>
+	<div class="col-7">
+		<!--<p>View Selected Entry</p>-->
+		{% if entry.entry %}
+			{{ entry.entry }}
+		{% endif %}
+	</div>
+</div>
 </div>
 
 {% endblock %}
