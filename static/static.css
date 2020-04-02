@@ -1,4 +1,53 @@
 
+header { 
+	background-image: url('https://mdbootstrap.com/img/Photos/Others/img%20%2848%29.jpg'); 
+	background-repeat: no-repeat; 
+	background-size: cover; 
+	background-position: center center;
+	padding: 20px;
+}
+
+nav {
+	text-align: left;
+	padding: 10px 5px;
+}
+
+nav ul {
+	list-style: none;
+	margin:0 2px;
+	padding: 0;
+}
+
+nav li {
+	display: inline-block;
+	padding: 5px 5px;
+}
+
+html {
+	padding: 10px;
+}
+
+a {
+	color: ivory;
+}
+
+h3 {
+	color: ;
+	font-family: "Comic Sans MS", cursive, sans-serif;
+	font-weight: 900;
+}
+
+h5 {
+	color: ;
+	font-family: "Comic Sans MS", cursive, sans-serif;
+	font-weight: 900;
+}
+
+label {
+	font-family: "Comic Sans MS", cursive, sans-serif;
+	font-weight: bolder;
+}
+
 .around-body {
 	padding: 5%;
 }
@@ -26,14 +75,6 @@
   top: 0;
 }
 
-header { 
-	background-image: url('https://mdbootstrap.com/img/Photos/Others/img%20%2848%29.jpg'); 
-	background-repeat: no-repeat; 
-	background-size: cover; 
-	background-position: center center;
-	padding: 20px;
-}
-
 .header-ul {
 	margin: 0;
 	padding: 0;
@@ -44,30 +85,11 @@ header {
 	display: inline;
 }
 
-html {
-	padding: 10px;
-}
-
-a {
-	color: ivory;
-}
-
 .button-divs {
 	text-align: center
 	color: black ;
 }
 
-h3 {
-	color: ;
-	font-family: "Comic Sans MS", cursive, sans-serif;
-	font-weight: 900;
-}
-
-h5 {
-	color: ;
-	font-family: "Comic Sans MS", cursive, sans-serif;
-	font-weight: 900;
-}
 
 #round_buttons {
 	border-radius: 50%;
@@ -81,10 +103,6 @@ h5 {
 	align-items: right;
 }
 
-label {
-	font-family: "Comic Sans MS", cursive, sans-serif;
-	font-weight: bolder;
-}
 
 #large-box {
 	height: 100px;
