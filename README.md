@@ -30,3 +30,8 @@ External API Cloudinary
 ### Search 
 ### Create picture table to upload more than one picture, not limited to an entry
 ### Thumbnail images
+
+
+# Screenshot Directory
+
+### There are screenshots in the screenshot directory to see a sample of each page.
