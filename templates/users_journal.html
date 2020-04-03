@@ -32,7 +32,7 @@
 	<div>
 		<form id="addNoteForm" action="/add_note" method="POST" enctype="multipart/form-data">
 			<h3>Add a note</h3>
-			<input type="text" name="note" id="note" placeholder="Not all who wander...">
+			<textarea type="text" name="note" id="note" placeholder="Not all who wander..."></textarea>
 			<br>
 			<br>
 			<input type="submit" class="btn btn-dark">
@@ -41,7 +41,7 @@
 
 	<div class="notes-section">
 	<br>
-		<p>Notes</p>
+		<p id="note-p">Notes</p>
 		<div id="allTheNotes">
 			{% if notes %}
 				{% for note in notes %}

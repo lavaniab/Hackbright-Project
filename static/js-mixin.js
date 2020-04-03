@@ -15,9 +15,11 @@ $(document).ready(function() {
 		const myRequest = $.ajax(payload);
 
 		myRequest.then(function(response) {
-			const htmlToAdd = `<li>${response.note}</li>` //can add href here
+			const htmlToAdd = `<p>${response.note}</p>` //can add href here
                       									//template literal
 			whereTheNotesGo.append(htmlToAdd);
+
+			$('#note').val('')
 		})
 
 	});
