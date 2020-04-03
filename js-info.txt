@@ -1,3 +1,0 @@
-https://leafletjs.com/download.html
-Leaflet 1.6.0
-For map abilities with my app
