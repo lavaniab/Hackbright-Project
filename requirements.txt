@@ -1,5 +1,5 @@
 blinker==1.4
-certifi==2019.11.28
+certifi==2022.12.7
 click==6.7
 cloudinary==1.20.0
 Flask==1.0.2
